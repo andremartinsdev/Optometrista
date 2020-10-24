@@ -3,7 +3,7 @@ import ModelPaciente from '../models/ModelPaciente'
 class ControllerPaciente {
   async save(req, res) {
     const { data } = req.body
-    const uuid = await ModelPaciente.save(data)
+    const uuid = await ModelPaciente.save({ ...data, idEmpresa: req.idEmpresa })
     return res.status(201).json({
       message: 'Paciente registrado com sucesso.',
       uuid: uuid

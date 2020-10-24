@@ -5,8 +5,15 @@ const server = express();
 
 server.use(express.json())
 
+
 server.get('/', (req, res, next) => {
   return res.json({ teste: 'ok' })
+})
+
+
+server.use((req, res, next) => {
+  req.idEmpresa = 1
+  next()
 })
 
 server.use(Routes)

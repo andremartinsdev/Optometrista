@@ -13,6 +13,19 @@ class ModelPaciente {
   async update(paciente, uuid = "") {
     await knex('paciente').update(paciente).where('uuid', '=', uuid)
   }
+
+  async delete(uuid = "") {
+    await knex('paciente').delete()
+      .where('uuid', '=', uuid)
+  }
+
+  async findById(uuid = "") {
+    const result = await knex('paciente').select()
+      .where('uuid', '=', uuid)
+      .first()
+
+    return result
+  }
 }
 
 

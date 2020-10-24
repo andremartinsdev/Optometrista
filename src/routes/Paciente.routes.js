@@ -5,5 +5,7 @@ const router = Router()
 
 router.post('/', ControllerPaciente.save)
 router.put('/:uuid', ControllerPaciente.update)
+router.delete('/:uuid', ControllerPaciente.delete)
+router.get('/:uuid', ControllerPaciente.findById)
 
 export default router

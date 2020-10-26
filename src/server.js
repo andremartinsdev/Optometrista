@@ -1,14 +1,12 @@
 import express from 'express'
 import Routes from './routes/routes'
+import cors from 'cors'
 
 const server = express();
 
+server.use(cors())
+
 server.use(express.json())
-
-
-server.get('/', (req, res, next) => {
-  return res.json({ teste: 'ok' })
-})
 
 
 server.use((req, res, next) => {
@@ -18,5 +16,4 @@ server.use((req, res, next) => {
 
 server.use(Routes)
 
-
-server.listen(3000);
+server.listen(3000, () => console.log(`http://localhost:3000`));

@@ -3,28 +3,62 @@ import { v4 } from 'uuid'
 
 class ModelPaciente {
   async save(paciente) {
+    const uuid = v4();
     const result = await knex('paciente').insert({
       ...paciente,
-      uuid: v4()
+      uuid
     })
-    return result[0]
+    return uuid
   }
 
-  async update(paciente, uuid = "") {
-    await knex('paciente').update(paciente).where('uuid', '=', uuid)
+  async update(paciente, uuid = "", idEmpresa) {
+    await knex('paciente').update(paciente).where('uuid', '=', uuid).where('idEmpresa','=', idEmpresa)
   }
 
-  async delete(uuid = "") {
+  async delete(uuid = "", idEmpresa) {
     await knex('paciente').delete()
       .where('uuid', '=', uuid)
+      .where('idEmpresa','=', idEmpresa)
   }
 
-  async findById(uuid = "") {
+  async findById(uuid = "", idEmpresa) {
     const result = await knex('paciente').select()
       .where('uuid', '=', uuid)
+      .where('idEmpresa','=', idEmpresa)
       .first()
 
     return result
+  }
+
+  async readAll(idEmpresa) {
+    const result = await knex('paciente').select()
+      .where('idEmpresa', '=', idEmpresa)
+
+    return result
+  }
+
+  async readParams(idEmpresa, data, colunm) {
+    const dados = `%${data}%`
+    const result = await knex('paciente').select()
+      .where('idEmpresa', '=', idEmpresa)
+      .where(colunm, 'like', dados)
+
+    return result
+  }
+
+  async pagination(idEmpresa, limit, page){
+    const result = await knex('paciente').select()
+    .where('idEmpresa', '=', idEmpresa)
+    .limit(limit).offset((page - 1) * limit)
+
+    const total = await knex('paciente')
+    .where('idEmpresa', '=', idEmpresa)
+    .count('idEmpresa as count')
+
+    return {
+      result,
+      total
+    }
   }
 }
 

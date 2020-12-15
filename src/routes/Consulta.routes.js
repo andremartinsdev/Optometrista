@@ -7,5 +7,6 @@ router.post('/', ControllerConsulta.save)
 router.put('/:uuid', ControllerConsulta.update)
 router.delete('/:uuid', ControllerConsulta.delete)
 router.get('/:uuid', ControllerConsulta.findById)
+router.get('/readToday/:data', ControllerConsulta.findByDate)
 
 export default router

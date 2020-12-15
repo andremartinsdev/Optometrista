@@ -7,5 +7,6 @@ router.post('/', ControllerPrescricaoOculos.save)
 router.put('/:uuid', ControllerPrescricaoOculos.update)
 router.delete('/:uuid', ControllerPrescricaoOculos.delete)
 router.get('/:uuid', ControllerPrescricaoOculos.findById)
+router.get('/read/:idPaciente/:dataInicial/:dataFinal', ControllerPrescricaoOculos.readParams)
 
 export default router

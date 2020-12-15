@@ -1,9 +1,9 @@
 import knex from '../config/db'
 import { v4 } from 'uuid'
 
-class ModelPrecricaoOculos {
+class ModelPrescricaoLente {
   async save(prescricaoOculos) {
-    const result = await knex('prescricao_oculos').insert({
+    const result = await knex('prescricao_lente').insert({
       ...prescricaoOculos,
       uuid: v4()
     })
@@ -11,16 +11,16 @@ class ModelPrecricaoOculos {
   }
 
   async update(prescricaoOculos, uuid = "") {
-    await knex('prescricao_oculos').update(prescricaoOculos).where('uuid', '=', uuid)
+    await knex('prescricao_lente').update(prescricaoOculos).where('uuid', '=', uuid)
   }
 
   async delete(uuid = "") {
-    await knex('prescricao_oculos').delete()
+    await knex('prescricao_lente').delete()
       .where('uuid', '=', uuid)
   }
 
   async findById(uuid = "") {
-    const result = await knex('prescricao_oculos').select()
+    const result = await knex('prescricao_lente').select()
       .where('uuid', '=', uuid)
       .first()
 
@@ -28,7 +28,7 @@ class ModelPrecricaoOculos {
   }
 
   async read(idPaciente, idEmpresa, dataInicial, dataFinal) {
-    const result = await knex('prescricao_oculos').select()
+    const result = await knex('prescricao_lente').select()
       .where('idEmpresa', '=', idEmpresa)
       .where('idPaciente', '=', idPaciente)
       .where('data', '>=', dataInicial)
@@ -39,4 +39,4 @@ class ModelPrecricaoOculos {
 }
 
 
-export default new ModelPrecricaoOculos()
+export default new ModelPrescricaoLente()

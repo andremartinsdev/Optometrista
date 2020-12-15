@@ -7,5 +7,9 @@ router.post('/', ControllerPaciente.save)
 router.put('/:uuid', ControllerPaciente.update)
 router.delete('/:uuid', ControllerPaciente.delete)
 router.get('/:uuid', ControllerPaciente.findById)
+router.get('/pagination/page', ControllerPaciente.pagination)
+router.get('/readCpf/:cpf', ControllerPaciente.readCpf)
+router.get('/readName/:nome', ControllerPaciente.readName)
+router.get('/read/all', ControllerPaciente.readAll)
 
 export default router

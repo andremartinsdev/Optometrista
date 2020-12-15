@@ -1,9 +1,9 @@
-import ModelPrescrissaoOculos from '../models/ModelPrescricaoOculos'
+import ModelPrescricaoLente from '../models/ModelPrescricaoLente'
 
 class ControllerPrescrissaoOculos {
   async save(req, res) {
     const { data } = req.body
-    const uuid = await ModelPrescrissaoOculos.save({ ...data, idEmpresa: req.idEmpresa })
+    const uuid = await ModelPrescricaoLente.save({ ...data, idEmpresa: req.idEmpresa })
     return res.status(201).json({
       message: 'Prescrição registrado com sucesso.',
       uuid: uuid
@@ -13,7 +13,7 @@ class ControllerPrescrissaoOculos {
   async update(req, res) {
     const { data } = req.body
     const uuid = String(req.params.uuid)
-    await ModelPrescrissaoOculos.update(data, uuid)
+    await ModelPrescricaoLente.update(data, uuid)
 
     return res.status(201).json({
       message: 'Prescrição atualizada com sucesso.'
@@ -22,7 +22,7 @@ class ControllerPrescrissaoOculos {
 
   async delete(req, res) {
     const uuid = String(req.params.uuid)
-    await ModelPrescrissaoOculos.delete(uuid)
+    await ModelPrescricaoLente.delete(uuid)
     return res.status(201).json({
       message: 'Prescrição deletada com sucesso.'
     })
@@ -30,7 +30,7 @@ class ControllerPrescrissaoOculos {
 
   async findById(req, res) {
     const uuid = String(req.params.uuid)
-    const result = await ModelPrescrissaoOculos.findById(uuid)
+    const result = await ModelPrescricaoLente.findById(uuid)
     return res.status(201).json({
       message: 'Prescrição pesquisada.',
       prescricao: result
@@ -41,7 +41,7 @@ class ControllerPrescrissaoOculos {
     const idPaciente = req.params.idPaciente;
       const dataInicial = req.params.dataInicial;
       const dataFinal = req.params.dataFinal;
-      const result = await ModelPrescrissaoOculos.read(idPaciente, req.idEmpresa, dataInicial, dataFinal)
+      const result = await ModelPrescricaoLente.read(idPaciente, req.idEmpresa, dataInicial, dataFinal)
       res.status(201).json({
         result
       })

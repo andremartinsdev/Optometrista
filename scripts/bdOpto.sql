@@ -2,30 +2,33 @@ create database opto;
 use opto;
 
 CREATE TABLE `prescricao_oculos` (
-  `IDPRESCRICAOOCULOS` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `IDCLINICA` int(11) NOT NULL,
-  `IDCONSULTA` int NOT NULL,
-  `IDPACIENTE` int(11) NOT NULL,
-  `OD_ESFERICO` varchar(11) DEFAULT NULL,
-  `OD_CILINDRICO` varchar(11) DEFAULT NULL,
-  `OD_EIXO` varchar(11) DEFAULT NULL,
-  `OD_AV` varchar(11) DEFAULT NULL,
-  `OE_ESFERICO` varchar(11) DEFAULT NULL,
-  `OE_CILINDRICO` varchar(11) DEFAULT NULL,
-  `OE_EIXO` varchar(11) DEFAULT NULL,
-  `OE_AV` varchar(11) DEFAULT NULL,
-  `ADICAO` varchar(11) DEFAULT NULL,
-  `LENTE` varchar(20) DEFAULT NULL,
-  `OBSERVACAO` varchar(100) DEFAULT NULL
+  `idPrescricaoOculos` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idPaciente` int NOT NULL,
+  `idConsulta` int NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `data` date,
+  `od_esferico` varchar(11) DEFAULT NULL,
+  `od_cilindrico` varchar(11) DEFAULT NULL,
+  `od_eixo` varchar(11) DEFAULT NULL,
+  `od_av` varchar(11) DEFAULT NULL,
+  `oe_esferico` varchar(11) DEFAULT NULL,
+  `oe_cilindrico` varchar(11) DEFAULT NULL,
+  `oe_eixo` varchar(11) DEFAULT NULL,
+  `oe_av` varchar(11) DEFAULT NULL,
+  `adicao` varchar(11) DEFAULT NULL,
+  `lente` varchar(20) DEFAULT NULL,
+  `observacao` varchar(100) DEFAULT NULL
   
 );
-CREATE TABLE `consultas` (
-`IDCONSULTA` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-`UUIDCLINICA` varchar(100) NOT NULL,
-`IDPACIENTE` int NOT NULL,
-`IDFICHACLINICA` int NOT NULL,
-`DATA` date DEFAULT NULL,
-`TITULO` varchar(50) DEFAULT NULL
+CREATE TABLE `consulta` (
+`idConsulta` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`idEmpresa` int NOT NULL,
+`nomePaciente` varchar(50) NOT NULL,
+`uuidPaciente` int NOT NULL,
+`uuid` varchar(36) NOT NULL,
+`data` date DEFAULT NULL,
+`titulo` varchar(20) DEFAULT NULL
 );
 
 CREATE TABLE `clinica` (
@@ -41,36 +44,88 @@ CREATE TABLE `clinica` (
 
 
 CREATE TABLE `paciente` (
-  `IDPACIENTE` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `UUIDCLINICA` varchar(100) DEFAULT NULL,
-  `IDCLINICA` int DEFAULT NULL,
-  `NOMEPACIENTE` varchar(50) NOT NULL,
-  `CPF` varchar(30) DEFAULT NULL,
-  `RG` varchar(30) DEFAULT NULL,
-  `DATANASCIMENTO` varchar(30) DEFAULT NULL,
-  `EMAIL` varchar(50) DEFAULT NULL,
-  `ENDERECO` varchar(50) DEFAULT NULL,
-  `CIDADE` varchar(50) DEFAULT NULL,
-  `ESTADO` varchar(50) DEFAULT NULL,
-  `TELEFONE` varchar(30) DEFAULT NULL
+  `idPaciente` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `idEmpresa` int NOT NULL,
+  `uuid` varchar(36) NOT NULL,
+  `nomePaciente` varchar(50) NOT NULL,
+  `cpf` varchar(30) DEFAULT NULL,
+  `rg` varchar(30) DEFAULT NULL,
+  `dataNascimento` varchar(30) DEFAULT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `endereco` varchar(50) DEFAULT NULL,
+  `cidade` varchar(50) DEFAULT NULL,
+  `estado` varchar(50) DEFAULT NULL,
+  `telefone` varchar(30) DEFAULT NULL
 );
 
 CREATE TABLE `prescricao_lente` (
-  `IDPRESCRICAOOCULOS` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `IDCLINICA` int(11) NOT NULL,
-  `UUIDCLINICA` varchar(100) DEFAULT NULL,
-  `IDCONSULTA` int NOT NULL,
-  `IDPACIENTE` int(11) NOT NULL,
-  `OD_ESFERICO` varchar(11) DEFAULT NULL,
-  `OD_CILINDRICO` varchar(11) DEFAULT NULL,
-  `OD_EIXO` varchar(11) DEFAULT NULL,
-  `OD_AV` varchar(11) DEFAULT NULL,
-  `OE_ESFERICO` varchar(11) DEFAULT NULL,
-  `OE_CILINDRICO` varchar(11) DEFAULT NULL,
-  `OE_EIXO` varchar(11) DEFAULT NULL,
-  `OE_AV` varchar(11) DEFAULT NULL,
-  `LENTE` varchar(20) DEFAULT NULL,
-  `OBSERVACAO` varchar(100) DEFAULT NULL
+  `idPrescricaoOculos` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idPaciente` int NOT NULL,
+  `idConsulta` int NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `data` date,
+  `od_esferico` varchar(11) DEFAULT NULL,
+  `od_cilindrico` varchar(11) DEFAULT NULL,
+  `od_eixo` varchar(11) DEFAULT NULL,
+  `od_av` varchar(11) DEFAULT NULL,
+  `oe_esferico` varchar(11) DEFAULT NULL,
+  `oe_cilindrico` varchar(11) DEFAULT NULL,
+  `oe_eixo` varchar(11) DEFAULT NULL,
+  `oe_av` varchar(11) DEFAULT NULL,
+  `lente` varchar(20) DEFAULT NULL,
+  `observacao` varchar(100) DEFAULT NULL
+  
+);
+
+CREATE TABLE `agenda` (
+  `idAgendamento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idPaciente` int NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `idFormaPagamento` int NOT NULL DEFAULT 0,
+  `idOticaParceira` int NOT NULL DEFAULT 0,
+  `titulo` varchar(30) DEFAULT NULL,
+  `data` date,
+  `horario` varchar(10) DEFAULT '00:00',
+  `procedimento` varchar(20) NOT NULL,
+  `valorConsulta` decimal(12,2),
+  `idConsulta` int DEFAULT 0,
+  `atendido` boolean DEFAULT 0,
+  `recebido` boolean DEFAULT 0,
+  `observacao` varchar(80) DEFAULT NULL
+)
+
+CREATE TABLE `formaPagamento` (
+  `idFormaPagamento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `idEmpresa` int NOT NULL,
+  `uuid` varchar(36) NOT NULL,
+  `descricao` varchar(50) NOT NULL
+)
+
+CREATE TABLE `oticaParceira` (
+  `idOticaParceira` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `idEmpresa` int NOT NULL,
+  `uuid` varchar(36) NOT NULL,
+  `nome` varchar(50) NOT NULL
+)
+
+CREATE TABLE `procedimentos` (
+  `idProcedimento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `text` varchar(50) DEFAULT NULL,
+  `value` varchar(50) DEFAULT NULL,
+)
+
+CREATE TABLE `fichaClinica`(
+  `idFichaClinica`  int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `idEmpresa` int NOT NULL,
+  `idConsulta` int NOT NULL,
+  `uuid` varchar(100) DEFAULT NULL,
+  `idPaciente` int NOT NULL,
+  `data` date,
+  `json_fichaClinica` JSON
 );
 
 CREATE TABLE `laudo`(

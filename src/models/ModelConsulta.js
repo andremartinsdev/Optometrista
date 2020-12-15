@@ -3,29 +3,46 @@ import { v4 } from 'uuid'
 
 class ModelConsulta {
   async save(consulta) {
+    const uuid = v4();
     const result = await knex('consulta').insert({
       ...consulta,
-      uuid: v4()
+      uuid
     })
-    return result[0]
+    return {
+      uuid,
+      idConsulta: result
+    }
   }
 
-  async update(consulta, uuid = "") {
-    await knex('consulta').update(consulta).where('uuid', '=', uuid)
+  async update(consulta, uuid = "", idEmpresa) {
+    await knex('consulta').update(consulta).where('uuid', '=', uuid).where('idEmpresa','=', idEmpresa)
   }
 
-  async delete(uuid = "") {
+  async delete(uuid = "", idEmpresa) {
     await knex('consulta').delete()
       .where('uuid', '=', uuid)
+      .where('idEmpresa','=', idEmpresa)
   }
 
-  async findById(uuid = "") {
+  async findById(uuid = "", idEmpresa) {
     const result = await knex('consulta').select()
       .where('uuid', '=', uuid)
+      .where('idEmpresa', '=', idEmpresa)
       .first()
 
     return result
   }
+
+  async findByDate(idEmpresa, date) {
+    const result = await knex('consulta').select('consulta.idPaciente','consulta.titulo','consulta.data','paciente.uuid AS uuidPaciente')
+      .where('consulta.idEmpresa', '=', idEmpresa)
+      .where('data','=', date)
+      .leftJoin('paciente', 'consulta.idPaciente', 'paciente.idPaciente')
+      
+    return result
+  }
+
+  
 }
 
 

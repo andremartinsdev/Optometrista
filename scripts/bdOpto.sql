@@ -87,28 +87,30 @@ CREATE TABLE `agenda` (
   `idOticaParceira` int NOT NULL DEFAULT 0,
   `titulo` varchar(30) DEFAULT NULL,
   `data` date,
+  `dataVencimento` date,
   `horario` varchar(10) DEFAULT '00:00',
   `procedimento` varchar(20) NOT NULL,
   `valorConsulta` decimal(12,2),
   `idConsulta` int DEFAULT 0,
+  `dataPagamento` date,
   `atendido` boolean DEFAULT 0,
   `recebido` boolean DEFAULT 0,
   `observacao` varchar(80) DEFAULT NULL
-)
+);
 
 CREATE TABLE `formaPagamento` (
   `idFormaPagamento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `idEmpresa` int NOT NULL,
   `uuid` varchar(36) NOT NULL,
   `descricao` varchar(50) NOT NULL
-)
+);
 
 CREATE TABLE `oticaParceira` (
   `idOticaParceira` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `idEmpresa` int NOT NULL,
   `uuid` varchar(36) NOT NULL,
   `nome` varchar(50) NOT NULL
-)
+);
 
 CREATE TABLE `procedimentos` (
   `idProcedimento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -116,7 +118,31 @@ CREATE TABLE `procedimentos` (
   `idEmpresa` int NOT NULL,
   `text` varchar(50) DEFAULT NULL,
   `value` varchar(50) DEFAULT NULL,
-)
+);
+
+CREATE TABLE `despesa` (
+  `idDespesa` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `descricaoDespesa` varchar(80) DEFAULT NULL,
+  `data` date,
+  `valor` decimal(12,2) DEFAULT NULL,
+  `despesaPaga` boolean,
+  `idFormaPagamento` int NOT NULL DEFAULT 0,
+  `observacao` varchar(100) DEFAULT NULL
+);
+
+CREATE TABLE `receita` (
+  `idReceita` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL,
+  `idEmpresa` int NOT NULL,
+  `descricaoReceita` varchar(80) DEFAULT NULL,
+  `data` date,
+  `valor` decimal(12,2) DEFAULT NULL,
+  `receitaPaga` boolean,
+  `idFormaPagamento` int NOT NULL DEFAULT 0,
+  `observacao` varchar(100) DEFAULT NULL
+);
 
 CREATE TABLE `fichaClinica`(
   `idFichaClinica`  int NOT NULL AUTO_INCREMENT PRIMARY KEY,

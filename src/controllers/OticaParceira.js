@@ -3,7 +3,6 @@ import ModelOticasParceiras from '../models/ModelOticasParceiras'
 class ControllerOticaParceira {
     async save(req, res){
         const {data} = req.body
-        console.log(data)
         const idEmpresa = req.idEmpresa
         const uuid = await ModelOticasParceiras.save({...data, idEmpresa: idEmpresa})
         return res.status(201).json({

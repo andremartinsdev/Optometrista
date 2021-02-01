@@ -5,7 +5,6 @@ import Validation from '../services/Validation'
 class ControllerAgenda {
   async save(req, res) {
     const { data } = req.body
-    console.log(data)
     if(Validation.ValidaAgendamento(data)){
       res.status(400).json({
         message: 'Ocorreu um erro de Validação'
@@ -93,6 +92,54 @@ class ControllerAgenda {
     })
   }
 
+
+  async readDateRelatorioReceita(req, res) {
+    const idEmpresa = req.idEmpresa
+    const dataInicial = req.params.dataInicial
+    const dataFinal = req.params.dataFinal
+    const result = await ModelAgenda.readDateRelatorioReceita(dataInicial, dataFinal, idEmpresa)
+    return res.status(201).json({
+      message: 'relatório consultado',
+      consulta: result
+    })
+  }
+
+  async readDateRelatorioReceber(req, res) {
+    const idEmpresa = req.idEmpresa
+    const dataInicial = req.params.dataInicial
+    const dataFinal = req.params.dataFinal
+    const result = await ModelAgenda.readDateRelatorioReceber(dataInicial, dataFinal, idEmpresa)
+    return res.status(201).json({
+      message: 'relatório consultado receber',
+      consultaReceber: result
+    })
+  }
+
+  async readDateRelatorioReceberFormaPagamento(req, res) {
+    const idEmpresa = req.idEmpresa
+    const dataInicial = req.params.dataInicial
+    const dataFinal = req.params.dataFinal
+    const idFormaPagamento = req.params.idFormaPagamento
+    const result = await ModelAgenda.readDateRelatorioReceberFormaPagamento(dataInicial, dataFinal, idEmpresa, idFormaPagamento)
+    return res.status(201).json({
+      message: 'relatório consultado receber',
+      consultaReceber: result
+    })
+  }
+
+
+  async readDateRelatorioReceitaFormPag(req, res) {
+    const idEmpresa = req.idEmpresa
+    const dataInicial = req.params.dataInicial
+    const dataFinal = req.params.dataFinal
+    const idFormaPagamento = req.params.idFormaPagamento
+    const result = await ModelAgenda.readDateRelatorioReceitaFormPag(dataInicial, dataFinal, idEmpresa,idFormaPagamento)
+    return res.status(201).json({
+      message: 'relatório consultado receber',
+      consulta: result
+    })
+  }
+
   async readDateAgendamentoFinalizado(req, res) {
     const idEmpresa = req.idEmpresa
     const dataInicial = req.params.dataInicial
@@ -120,6 +167,16 @@ class ControllerAgenda {
     const dataFinal = req.params.dataFinal
     const idPaciente = req.params.idPaciente
     const result = await ModelAgenda.readDatePaciente(dataInicial, dataFinal, idEmpresa, idPaciente)
+    return res.status(201).json({
+      message: 'agendamentos pesquisados.',
+      agendamentos: result
+    })
+  }
+
+  async readDateVencimento(req, res){
+    const idEmpresa = req.idEmpresa
+    const dataAtual = req.params.dataAtual
+    const result = await ModelAgenda.readDateVencimento(idEmpresa, dataAtual)
     return res.status(201).json({
       message: 'agendamentos pesquisados.',
       agendamentos: result

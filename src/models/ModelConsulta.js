@@ -42,6 +42,17 @@ class ModelConsulta {
     return result
   }
 
+
+  async readData(dataInicial, dataFinal){
+    const result = await knex('consulta').select()
+    .where('data','>=', dataInicial)
+    .where('data','<=', dataFinal)
+
+    return result
+  }
+
+  
+
   
 }
 

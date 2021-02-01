@@ -46,6 +46,8 @@ class ModelPaciente {
     return result
   }
 
+
+  
   async pagination(idEmpresa, limit, page){
     const result = await knex('paciente').select()
     .where('idEmpresa', '=', idEmpresa)

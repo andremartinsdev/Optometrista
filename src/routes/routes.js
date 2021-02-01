@@ -8,6 +8,8 @@ import { Router } from 'express'
  import RouterProcedimento from './Procedimento.routes'
  import RouterFormaDePagamento from './FormaDePagamento.routes'
  import RouterOticaParceira from './OticasParceiras.routes'
+ import RouterDespesa from './Despesa.routes'
+ import RouterReceita from './Receita.routes'
 
 const router = Router()
 
@@ -20,5 +22,7 @@ const router = Router()
  router.use('/Procedimento', RouterProcedimento)
  router.use('/FormaDePagamento', RouterFormaDePagamento)
  router.use('/OticasParceiras', RouterOticaParceira)
+ router.use('/Despesa', RouterDespesa)
+ router.use('/Receita', RouterReceita)
 
 export default router

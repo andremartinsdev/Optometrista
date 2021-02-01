@@ -3,7 +3,6 @@ import ModelFormaDePagamento from '../models/ModelFormaDePagamento'
 class ControllerFormaDePagamento {
     async save(req, res){
         const {data} = req.body
-        console.log(data)
         const idEmpresa = req.idEmpresa
         const uuid = await ModelFormaDePagamento.save({...data, idEmpresa: idEmpresa})
         return res.status(201).json({

@@ -30,7 +30,10 @@ class ModelAgenda {
       }
 
       async readAgendaJoinPaciente(uuid = "", idEmpresa) {
-        const result = await knex('agenda').select('paciente.idPaciente','paciente.uuid AS pacienteUuid','paciente.nomePaciente','paciente.dataNascimento','agenda.procedimento', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido', 'agenda.recebido', 'agenda.valorConsulta')
+        const result = await knex('agenda').select('paciente.idPaciente','paciente.uuid AS pacienteUuid','paciente.nomePaciente',
+        'paciente.dataNascimento','agenda.procedimento', 'agenda.idFormaPagamento', 'agenda.idOticaParceira',
+        'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido',
+         'agenda.recebido', 'agenda.valorConsulta')
           .where('agenda.uuid', '=', uuid)
           .where('agenda.idEmpresa', '=', idEmpresa)
           .leftJoin('paciente','agenda.idPaciente', 'paciente.idPaciente')
@@ -70,6 +73,58 @@ class ModelAgenda {
       return result
     }
 
+
+    async readDateRelatorioReceita(dataInicial, dataFinal, idEmpresa){
+      const result = await knex('agenda').select('agenda.valorConsulta', 'agenda.idAgendamento', 'agenda.dataPagamento', 'paciente.nomePaciente', 'formapagamento.descricao')
+      .where('agenda.dataPagamento', '>=', dataInicial)
+      .where('agenda.dataPagamento', '<=', dataFinal)
+      .where('agenda.idEmpresa','=', idEmpresa)
+      .where('agenda.atendido','=', true)
+      .where('agenda.recebido','=', true)
+      .leftJoin('paciente','agenda.idPaciente', 'paciente.idPaciente')
+      .leftJoin('formapagamento','agenda.idFormaPagamento', 'formapagamento.idFormaPagamento')
+
+      return result
+    }
+
+    async readDateRelatorioReceitaFormPag(dataInicial, dataFinal, idEmpresa, idFormaPagamento){
+      const result = await knex('agenda').select('agenda.valorConsulta', 'agenda.idAgendamento', 'agenda.dataPagamento', 'paciente.nomePaciente', 'formapagamento.descricao')
+      .where('agenda.dataPagamento', '>=', dataInicial)
+      .where('agenda.dataPagamento', '<=', dataFinal)
+      .where('agenda.idFormaPagamento', '=', idFormaPagamento)
+      .where('agenda.idEmpresa','=', idEmpresa)
+      .where('agenda.atendido','=', true)
+      .where('agenda.recebido','=', true)
+      .leftJoin('paciente','agenda.idPaciente', 'paciente.idPaciente')
+      .leftJoin('formapagamento','agenda.idFormaPagamento', 'formapagamento.idFormaPagamento')
+
+      return result
+    }
+
+
+    async readDateRelatorioReceber(dataInicial, dataFinal, idEmpresa){
+      const result = await knex('agenda').select('agenda.valorConsulta')
+      .where('agenda.data', '>=', dataInicial)
+      .where('agenda.data', '<=', dataFinal)
+      .where('agenda.idEmpresa','=', idEmpresa)
+     
+
+      return result
+    }
+
+
+    async readDateRelatorioReceberFormaPagamento(dataInicial, dataFinal, idEmpresa, idFormaPagamento){
+      const result = await knex('agenda').select('agenda.valorConsulta')
+      .where('agenda.dataPagamento', '>=', dataInicial)
+      .where('agenda.dataPagamento', '<=', dataFinal)
+      .where('agenda.idEmpresa','=', idEmpresa)
+      .where('agenda.idFormaPagamento','=', idFormaPagamento)
+     
+
+      return result
+    }
+
+
     async readDateAgendamentoFinalizado(dataInicial, dataFinal, idEmpresa){
       const result = await knex('agenda').select('paciente.idPaciente','paciente.nomePaciente','paciente.dataNascimento', 'paciente.uuid AS pacienteUuid','agenda.data','agenda.procedimento', 'agenda.horario', 'agenda.uuid','agenda.atendido', 'agenda.valorConsulta')
       .where('agenda.data', '>=', dataInicial)
@@ -95,6 +150,17 @@ class ModelAgenda {
       .where('data', '<=', dataFinal)
       .where('idPaciente', '=', idPaciente)
       .where('idEmpresa','=', idEmpresa)
+
+      return result
+    }
+
+
+    async readDateVencimento(idEmpresa, dataAtual){
+      const result = await knex('agenda').select('paciente.idPaciente','paciente.nomePaciente','paciente.dataNascimento', 'paciente.uuid AS pacienteUuid','agenda.data','agenda.procedimento', 'agenda.horario', 'agenda.uuid','agenda.atendido', 'agenda.valorConsulta', 'agenda.dataVencimento')
+      .where('agenda.dataVencimento', '>=', dataAtual)
+      .where('agenda.idEmpresa','=', idEmpresa)
+      .leftJoin('paciente','agenda.idPaciente', 'paciente.idPaciente')
+
 
       return result
     }

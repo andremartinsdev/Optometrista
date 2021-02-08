@@ -18,13 +18,13 @@ class ModelPaciente {
   async delete(uuid = "", idEmpresa) {
     await knex('paciente').delete()
       .where('uuid', '=', uuid)
-      .where('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa','=', idEmpresa)
   }
 
   async findById(uuid = "", idEmpresa) {
     const result = await knex('paciente').select()
       .where('uuid', '=', uuid)
-      .where('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa','=', idEmpresa)
       .first()
 
     return result
@@ -41,7 +41,7 @@ class ModelPaciente {
     const dados = `%${data}%`
     const result = await knex('paciente').select()
       .where('idEmpresa', '=', idEmpresa)
-      .where(colunm, 'like', dados)
+      .andWhere(colunm, 'like', dados)
 
     return result
   }

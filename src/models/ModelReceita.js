@@ -22,7 +22,7 @@ class ModelReceita {
     async read(idEmpresa, uuid){
         const result = await knex('receita').select()
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid','=', uuid)
+        .andWhere('uuid','=', uuid)
 
         return result
     }
@@ -30,7 +30,7 @@ class ModelReceita {
     async delete(idEmpresa, uuid){
         const result = await knex('receita').delete()
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid','=', uuid)
+        .andWhere('uuid','=', uuid)
 
         return result
       }
@@ -38,7 +38,7 @@ class ModelReceita {
     async update(receita, idEmpresa, uuid){
         const result = await knex('receita').update(receita)
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid', '=', uuid)
+        .andWhere('uuid', '=', uuid)
 
         return result
     }
@@ -46,8 +46,8 @@ class ModelReceita {
     async readDate(idEmpresa, dataInicial, dataFinal){
         const result = await knex('receita').select()
         .where('idEmpresa', '=', idEmpresa)
-        .where('data', '>=', dataInicial)
-        .where('data', '<=', dataFinal)
+        .andWhere('data', '>=', dataInicial)
+        .andWhere('data', '<=', dataFinal)
 
         return result
     }
@@ -55,9 +55,9 @@ class ModelReceita {
     async readDatePagamento(idEmpresa, dataInicial, dataFinal, idFormaPagamento){
         const result = await knex('receita').select()
         .where('idEmpresa', '=', idEmpresa)
-        .where('data', '>=', dataInicial)
-        .where('data', '<=', dataFinal)
-        .where('idFormaPagamento', '=', idFormaPagamento)
+        .andWhere('data', '>=', dataInicial)
+        .andWhere('data', '<=', dataFinal)
+        .andWhere('idFormaPagamento', '=', idFormaPagamento)
 
         return result
     }

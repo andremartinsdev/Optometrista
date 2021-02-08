@@ -22,7 +22,7 @@ class ModelProcedimento {
     async read(uuid, idEmpresa){
       const result = await knex('procedimentos').select()
       .where('idEmpresa','=', idEmpresa)
-      .where('uuid','=', uuid)
+      .andWhere('uuid','=', uuid)
       return result
     }
 
@@ -33,7 +33,7 @@ class ModelProcedimento {
     async delete(uuid, idEmpresa){
       const result = await knex('procedimentos').delete()
       .where('idEmpresa','=', idEmpresa)
-      .where('uuid','=', uuid)
+      .andWhere('uuid','=', uuid)
       return result
     }
 }

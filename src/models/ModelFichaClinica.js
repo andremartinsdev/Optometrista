@@ -24,9 +24,9 @@ class ModelFichaClinica {
   async read(idPaciente, idEmpresa, dataInicial, dataFinal) {
     const result = await knex('fichaclinica').select()
       .where('idEmpresa', '=', idEmpresa)
-      .where('idPaciente', '=', idPaciente)
-      .where('data', '>=', dataInicial)
-      .where('data', '<=', dataFinal)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
 
     return result
   }
@@ -34,13 +34,13 @@ class ModelFichaClinica {
   async delete(uuid = "", idEmpresa) {
     await knex('fichaclinica').delete()
       .where('uuid', '=', uuid)
-      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idEmpresa', '=', idEmpresa)
   }
 
  async findById(uuid = "", idEmpresa) {
     const result = await knex('fichaclinica').select()
       .where('uuid', '=', uuid)
-      .where('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa','=', idEmpresa)
       .first()
     result.json_fichaClinica = JSON.parse(result.json_fichaClinica)
     return result

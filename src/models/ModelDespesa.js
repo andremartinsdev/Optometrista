@@ -22,7 +22,7 @@ class ModelDespesa {
     async read(idEmpresa, uuid){
         const result = await knex('despesa').select()
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid','=', uuid)
+        .andWhere('uuid','=', uuid)
 
         return result
     }
@@ -30,7 +30,7 @@ class ModelDespesa {
     async delete(idEmpresa, uuid){
         const result = await knex('despesa').delete()
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid','=', uuid)
+        .andWhere('uuid','=', uuid)
 
         return result
       }
@@ -38,7 +38,7 @@ class ModelDespesa {
     async update(despesa, idEmpresa, uuid){
         const result = await knex('despesa').update(despesa)
         .where('idEmpresa','=', idEmpresa)
-        .where('uuid', '=', uuid)
+        .andWhere('uuid', '=', uuid)
 
         return result
     }
@@ -46,8 +46,8 @@ class ModelDespesa {
     async readDate(idEmpresa, dataInicial, dataFinal){
         const result = await knex('despesa').select()
         .where('idEmpresa', '=', idEmpresa)
-        .where('data', '>=', dataInicial)
-        .where('data', '<=', dataFinal)
+        .andWhere('data', '>=', dataInicial)
+        .andWhere('data', '<=', dataFinal)
 
         return result
     }
@@ -55,9 +55,9 @@ class ModelDespesa {
     async readDatePagamento(idEmpresa, dataInicial, dataFinal, idFormaPagamento){
         const result = await knex('despesa').select()
         .where('idEmpresa', '=', idEmpresa)
-        .where('data', '>=', dataInicial)
-        .where('data', '<=', dataFinal)
-        .where('idFormaPagamento', '=', idFormaPagamento)
+        .andWhere('data', '>=', dataInicial)
+        .andWhere('data', '<=', dataFinal)
+        .andWhere('idFormaPagamento', '=', idFormaPagamento)
 
         return result
     }

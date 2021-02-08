@@ -1,69 +1,130 @@
 import ModelReceita from '../models/ModelReceita'
+import Validation from '../services/Validation'
 
 
 class ControllerReceita {
-    async save(req,res){
-        const { data } = req.body
-        const uuid = await ModelReceita.save({...data, idEmpresa: req.idEmpresa})
-        return res.status(201).json({
-           result: uuid 
-        })
+    async save(req, res) {
+        try {
+            const { data } = req.body
+            if(Validation.ValidaReceita(data)){
+                return res.status(422).json({
+                    message: "Erro de validação nos dados da Receita"
+                })
+            }else{
+                const uuid = await ModelReceita.save({ ...data, idEmpresa: req.idEmpresa })
+                return res.status(201).json({
+                    result: uuid,
+                    message: "Receita Registrada com Sucesso"
+                })
+            }
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Erro ao Registrar Receita'
+            })
+        }
     }
 
-    async readAll(req, res){
-        const result = await ModelReceita.readAll(req.idEmpresa)
-        return res.status(201).json({
-            receitas: result
-        })
+    async readAll(req, res) {
+        try {
+            const result = await ModelReceita.readAll(req.idEmpresa)
+            return res.status(201).json({
+                receitas: result,
+                message: "Receita pesquisada com sucesso"
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Erro ao pesquisar Receita'
+            })
+        }
     }
 
 
-    async read(req, res){
-        const uuid = req.params.uuid
-        const result = await ModelReceita.read(req.idEmpresa, uuid)
-        return res.status(201).json({
-            receita: result
-        })
+    async read(req, res) {
+        try {
+            const uuid = req.params.uuid
+            const result = await ModelReceita.read(req.idEmpresa, uuid)
+            return res.status(201).json({
+                receita: result,
+                message: "Receita pesquisada com sucesso"
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: 'Erro ao pesquisar Receita #2'
+            })
+        }
     }
 
 
-    async delete(req, res){
-        const uuid = req.params.uuid
-        const result = await ModelReceita.delete(req.idEmpresa, uuid)
-        return res.status(201).json({
-            result
-        })
+    async delete(req, res) {
+        try {
+            const uuid = req.params.uuid
+            const result = await ModelReceita.delete(req.idEmpresa, uuid)
+            return res.status(201).json({
+                result,
+                message: "Receita deletada com Sucesso"
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: "Erro ao deletar Receita"
+            })
+        }
     }
 
-    async update(req, res){
-        const uuid = req.params.uuid
-        const { data } = req.body
-        const result = await ModelReceita.update(data, req.idEmpresa, uuid)
-        return res.status(201).json({
-            result
-        })
+    async update(req, res) {
+        try {
+            const uuid = req.params.uuid
+            const { data } = req.body
+            if(Validation.ValidaReceita(data)){
+                return res.status(422).json({
+                    message: "Erro de validação nos dados da Receita"
+                })
+            }else{
+                const result = await ModelReceita.update(data, req.idEmpresa, uuid)
+                return res.status(201).json({
+                    result,
+                    message: "Receita Atualizada com sucesso"
+                })
+            }
+        } catch (error) {
+            return res.status(500).json({
+                message: "Erro ao atualizar Receita"
+            })
+        }
     }
 
-    async readDate(req, res){
-        const dataInicial = req.params.dataInicial
-        const dataFinal = req.params.dataFinal
-        const result = await ModelReceita.readDate(req.idEmpresa, dataInicial, dataFinal)
+    async readDate(req, res) {
+        try {
+            const dataInicial = req.params.dataInicial
+            const dataFinal = req.params.dataFinal
+            const result = await ModelReceita.readDate(req.idEmpresa, dataInicial, dataFinal)
 
-        return res.status(201).json({
-            result
-        })
+            return res.status(201).json({
+                result,
+                message: "Receita pesquisada com Sucesso #3"
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: "Erro ao pesquisar Receita"
+            })
+        }
     }
 
-    async readDatePagamento(req, res){
-        const dataInicial = req.params.dataInicial
-        const dataFinal = req.params.dataFinal
-        const idFormaPagamento = req.params.idFormaPagamento
+    async readDatePagamento(req, res) {
+        try {
+            const dataInicial = req.params.dataInicial
+            const dataFinal = req.params.dataFinal
+            const idFormaPagamento = req.params.idFormaPagamento
 
-        const result = await ModelReceita.readDatePagamento(req.idEmpresa, dataInicial, dataFinal, idFormaPagamento)
+            const result = await ModelReceita.readDatePagamento(req.idEmpresa, dataInicial, dataFinal, idFormaPagamento)
 
-        res.status(201).json({
-            result
-        })
+            res.status(201).json({
+                result
+            })
+        } catch (error) {
+            return res.status(500).json({
+                message: "Erro ao pesquisar Receita #4"
+            })
+        }
     }
 }
 

@@ -21,13 +21,13 @@ class ModelConsulta {
   async delete(uuid = "", idEmpresa) {
     await knex('consulta').delete()
       .where('uuid', '=', uuid)
-      .where('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa','=', idEmpresa)
   }
 
   async findById(uuid = "", idEmpresa) {
     const result = await knex('consulta').select()
       .where('uuid', '=', uuid)
-      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idEmpresa', '=', idEmpresa)
       .first()
 
     return result
@@ -36,7 +36,7 @@ class ModelConsulta {
   async findByDate(idEmpresa, date) {
     const result = await knex('consulta').select('consulta.idPaciente','consulta.titulo','consulta.data','paciente.uuid AS uuidPaciente')
       .where('consulta.idEmpresa', '=', idEmpresa)
-      .where('data','=', date)
+      .andWhere('data','=', date)
       .leftJoin('paciente', 'consulta.idPaciente', 'paciente.idPaciente')
       
     return result
@@ -46,7 +46,7 @@ class ModelConsulta {
   async readData(dataInicial, dataFinal){
     const result = await knex('consulta').select()
     .where('data','>=', dataInicial)
-    .where('data','<=', dataFinal)
+    .andWhere('data','<=', dataFinal)
 
     return result
   }

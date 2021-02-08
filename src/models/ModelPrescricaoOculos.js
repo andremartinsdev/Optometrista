@@ -30,9 +30,9 @@ class ModelPrecricaoOculos {
   async read(idPaciente, idEmpresa, dataInicial, dataFinal) {
     const result = await knex('prescricao_oculos').select()
       .where('idEmpresa', '=', idEmpresa)
-      .where('idPaciente', '=', idPaciente)
-      .where('data', '>=', dataInicial)
-      .where('data', '<=', dataFinal)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
 
       return result
   }

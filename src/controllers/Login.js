@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+import { generateToken } from '../Middleware/Authentication'
 class ControllerLogin {
     async logar(req, res) {
         try {
@@ -8,33 +8,30 @@ class ControllerLogin {
                 cpfcnpj: cpfcnpj,
                 senha: senha
             })
-            
+
             if (user.data.Sucesso) {
-                req.session.idEmpresa = user.data.idEmpresa;
-                return res.status(201).json({ liberado: true })
-            }else{
-                return res.json(user.data)
+                const token = generateToken(user.data.idEmpresa);
+                return res.status(201).json({
+                    token: token
+                })
             }
         } catch (error) {
-            req.session.idEmpresa = user.data.idEmpresa;
-                return res.status(500).json({ liberado: false })
+            return res.status(500).json({ liberado: false })
         }
     }
 
     async login(req, res) {
         try {
-             return res.status(201).clearCookie('token').json({
-             message: "Cookie clear"
-        });
-    
+            return res.status(201).clearCookie('token').json({
+                message: "Cookie clear"
+            });
         } catch (error) {
             return res.staus(500).json({
                 message: "Cookie clear ERROR"
-           });
-       
+            });
         }
     }
-      
+
 }
 
 export default new ControllerLogin();

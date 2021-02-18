@@ -71,8 +71,8 @@ CREATE TABLE `prescricao_lente` (
 CREATE TABLE `clinica` (
   `idClinica` int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
   `idEmpresa` int NOT NULL,
-  `nomeClinica` va
-) 
+  `nomeClinica` varchar(50)
+) ;
 
 CREATE TABLE `agenda` (
   `idAgendamento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -113,7 +113,7 @@ CREATE TABLE `procedimentos` (
   `uuid` varchar(36) NOT NULL,
   `idEmpresa` int NOT NULL,
   `text` varchar(50) DEFAULT NULL,
-  `value` varchar(50) DEFAULT NULL,
+  `value` varchar(50) DEFAULT NULL
 );
 
 CREATE TABLE `despesa` (
@@ -174,7 +174,6 @@ CREATE TABLE `declaracao`(
   `UUIDCLINICA` varchar(100) DEFAULT NULL,
   `IDCONSULTA` int NOT NULL,
   `IDPACIENTE` int(11) NOT NULL,
-  `UUIDCLINICA` varchar (100) DEFAULT NULL,
   `DECLARACAO` varchar(200) NOT NULL
 );
 

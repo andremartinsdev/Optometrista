@@ -1,16 +1,57 @@
-const session = require('express-session');
-import knex from '../config/db'
-const KnexSessionStore = require("connect-session-knex")(session)
+import jwt from 'jsonwebtoken';
 
-const store = new KnexSessionStore({
-    tablename: "sessions",
-    knex: knex,
-})
+const SECRET = "BMSLTDA"
 
-export default session({
-    secret: "ae36bb7b84f8b5cb2fcd8a926a83b568",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {},
-    store: store
-})
+
+function generateToken(idEmpresa) {
+    return jwt.sign({ idEmpresa }, SECRET, {
+        expiresIn: 86400
+    });
+}
+
+function verify(req, res, next) {
+    const authHeaders = req.headers.authorization;
+
+    if (!authHeaders) {
+        return res.status(401).json({
+            message: 'Token não passado.'
+        })
+    }
+
+    const parts = authHeaders.split(' ');
+
+    if (parts.length != 2) {
+        return res.status(401).json({
+            message: 'Token em formato inválido.'
+        })
+    }
+
+    const [scheme, token] = parts;
+
+
+    if (!/^Bearer$/i.test(scheme)) {
+        return res.status(401).json({
+            message: 'Token em formato inválido.'
+        })
+    }
+
+    jwt.verify(token, SECRET, (error, decode) => {
+        if (/^jwt expired$/i.test(error)) {
+            return res.status(401).json({
+                message: 'Token expirado.'
+            })
+        }
+
+        if (error) {
+            return res.status(401).json({
+                message: 'Ocorreu um erro ao verificar o token.'
+            })
+        }
+
+        req.idEmpresa = decode.idEmpresa;
+
+        return next()
+    });
+}
+
+export { generateToken, verify }

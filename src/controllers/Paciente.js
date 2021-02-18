@@ -1,16 +1,16 @@
 import ModelPaciente from '../models/ModelPaciente'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaPaciente'
 
 class ControllerPaciente {
   async save(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidarPaciente(data)){
-        return res.status(400).json({
+      const { nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone } = req.body
+      if(Validation.ValidarPaciente({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone })){
+        return res.status(422).json({
           message: 'Ocorreu um erro de validação, dados invalidos'
         })      
       }
-      const uuid = await ModelPaciente.save({ ...data, idEmpresa: req.idEmpresa })
+      const uuid = await ModelPaciente.save({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone , idEmpresa: req.idEmpresa })
       return res.status(201).json({
         message: 'Paciente registrado com sucesso.',
         uuid: uuid
@@ -24,15 +24,15 @@ class ControllerPaciente {
 
   async update(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidarPaciente(data)){
+      const { nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone } = req.body
+      if(Validation.ValidarPaciente({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone })){
         return res.status(201).json({
           message: 'Erro de validação dos dados do Paciente'
         })
       }else{
         const uuid = String(req.params.uuid)
         const idEmpresa = req.idEmpresa
-        await ModelPaciente.update(data, uuid, idEmpresa)
+        await ModelPaciente.update({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone }, uuid, idEmpresa)
         return res.status(201).json({
           message: 'Paciente atualizado com sucesso.'
         })

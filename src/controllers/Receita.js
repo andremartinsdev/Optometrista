@@ -1,17 +1,17 @@
 import ModelReceita from '../models/ModelReceita'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaReceita'
 
 
 class ControllerReceita {
     async save(req, res) {
         try {
-            const { data } = req.body
-            if(Validation.ValidaReceita(data)){
+            const { descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao } = req.body
+            if(Validation.ValidaReceita({ descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao })){
                 return res.status(422).json({
                     message: "Erro de validação nos dados da Receita"
                 })
             }else{
-                const uuid = await ModelReceita.save({ ...data, idEmpresa: req.idEmpresa })
+                const uuid = await ModelReceita.save({ descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao, idEmpresa: req.idEmpresa })
                 return res.status(201).json({
                     result: uuid,
                     message: "Receita Registrada com Sucesso"
@@ -73,13 +73,13 @@ class ControllerReceita {
     async update(req, res) {
         try {
             const uuid = req.params.uuid
-            const { data } = req.body
-            if(Validation.ValidaReceita(data)){
+            const { descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao } = req.body
+            if(Validation.ValidaReceita({ descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao })){
                 return res.status(422).json({
                     message: "Erro de validação nos dados da Receita"
                 })
             }else{
-                const result = await ModelReceita.update(data, req.idEmpresa, uuid)
+                const result = await ModelReceita.update({descricaoReceita, data, valor, receitaPaga, idFormaPagamento, observacao}, req.idEmpresa, uuid)
                 return res.status(201).json({
                     result,
                     message: "Receita Atualizada com sucesso"

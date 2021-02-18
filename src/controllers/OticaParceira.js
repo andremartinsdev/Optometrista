@@ -1,18 +1,18 @@
 import ModelOticasParceiras from '../models/ModelOticasParceiras'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaOticaParceira'
 
 
 class ControllerOticaParceira {
     async save(req, res){
         try {
-            const {data} = req.body
-            if(Validation.ValidaOticaParceira(data)){
+            const { nome } = req.body
+            if(Validation.ValidaOticaParceira({nome})){
                 return res.status(422).json({
                     message: "Erro de validação ao registrar Ótica Parceira",
                 })
             }else{
                 const idEmpresa = req.idEmpresa
-                const uuid = await ModelOticasParceiras.save({...data, idEmpresa: idEmpresa})
+                const uuid = await ModelOticasParceiras.save({nome, idEmpresa: idEmpresa})
                 return res.status(201).json({
                     message: "Ótica cadastrada",
                     uuid: uuid

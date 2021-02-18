@@ -1,17 +1,17 @@
 import ModelProcedimento from '../models/ModelProcedimento'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaProcedimento'
 
 
 class ControllerProcedimento {
     async save(req, res) {
         try {
-            const { data } = req.body
-            if (Validation.ValidaProcedimento(data)) {
+            const { text, value } = req.body
+            if (Validation.ValidaProcedimento({ text, value })) {
                 return res.status(422).json({
                     message: 'Erro na validação dos dados do Procedimento',
                 })
             } else {
-                const uuid = await ModelProcedimento.save({ ...data, idEmpresa: req.idEmpresa })
+                const uuid = await ModelProcedimento.save({ text, value, idEmpresa: req.idEmpresa })
                 return res.status(201).json({
                     message: 'Procedimento Salvo',
                     uuid: uuid
@@ -53,14 +53,14 @@ class ControllerProcedimento {
 
     async update(req, res) {
         try {
-            const { data } = req.body
-            if (Validation.ValidaProcedimento(data)) {
+            const { text, value } = req.body
+            if (Validation.ValidaProcedimento({ text, value })) {
                 return res.status(422).json({
                     message: 'Erro na validação dos dados do Procedimento',
                 })
             } else {
                 const uuid = String(req.params.uuid)
-                await ModelProcedimento.update(data, uuid)
+                await ModelProcedimento.update({ text, value }, uuid)
                 return res.status(201).json({
                     message: 'Procedimento atualizada com sucesso.'
                 })

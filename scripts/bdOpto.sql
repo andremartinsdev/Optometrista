@@ -68,6 +68,12 @@ CREATE TABLE `prescricao_lente` (
   
 );
 
+CREATE TABLE `clinica` (
+  `idClinica` int NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+  `idEmpresa` int NOT NULL,
+  `nomeClinica` va
+) 
+
 CREATE TABLE `agenda` (
   `idAgendamento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL,

@@ -1,16 +1,16 @@
 import ModelPrescricaoLente from '../models/ModelPrescricaoLente'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaPrescricaoLente'
 
 class ControllerPrescrissaoLente {
   async save(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaPrecricaoLente(data)){
+      const { idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao } = req.body
+      if(Validation.ValidaPrecricaoLente({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao })){
         return res.status(422).json({
           message: 'Erro na validação dos dados da Prescrição - Lente',
         })
       }else{
-        const uuid = await ModelPrescricaoLente.save({ ...data, idEmpresa: req.idEmpresa })
+        const uuid = await ModelPrescricaoLente.save({ idPaciente, idConsulta, idEmpresa: req.idEmpresa , data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, })
         return res.status(201).json({
           message: 'Prescrição registrado com sucesso.',
           uuid: uuid
@@ -18,23 +18,25 @@ class ControllerPrescrissaoLente {
       }
     } catch (error) {
       return res.status(500).json({
-        message: 'Erro ao salvar Prescrição',
+        message: 'Erro ao salvar Prescrição' + error,
       })
     }
   }
 
   async update(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaPrecricaoLente(data)){
+      const { idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao } = req.body
+      if(Validation.ValidaPrecricaoLente({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao })){
         return res.status(422).json({
           message: 'Prescrição atualizada com sucesso.'
         })
       }else{
         const uuid = String(req.params.uuid)
-        await ModelPrescricaoLente.update(data, uuid)
+        await ModelPrescricaoLente.update({idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao}, uuid)
         return res.status(201).json({
           message: 'Prescrição atualizada com sucesso.'
+
+          
         })
       }
 

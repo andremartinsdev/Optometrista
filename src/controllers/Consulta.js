@@ -1,17 +1,17 @@
 import ModelConsulta from '../models/ModelConsulta'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaConsulta'
 
 
 class ControllerConsulta {
   async save(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaConsulta(data)){
+      const { idPaciente, data, titulo } = req.body
+      if(Validation.ValidaConsulta({ idPaciente, data, titulo })){
         return res.status(422).json({
           message: 'Erro na Validação dos dados da Consulta',
         })
       }else{
-        const uuid = await ModelConsulta.save({ ...data, idEmpresa: req.idEmpresa })
+        const uuid = await ModelConsulta.save({ idPaciente, data, titulo, idEmpresa: req.idEmpresa })
         return res.status(201).json({
           message: 'Consulta registrada com sucesso.',
           result : uuid
@@ -26,8 +26,8 @@ class ControllerConsulta {
 
   async update(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaConsulta(data)){
+      const { idPaciente, data, titulo } = req.body
+      if(Validation.ValidaConsulta({ idPaciente, data, titulo })){
         return res.status(422).json({
           message: 'Erro na Validação dos dados da Consulta',
         })

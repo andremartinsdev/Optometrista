@@ -1,19 +1,19 @@
 import validate from 'validate.js'
 import ModelDespesa from '../models/ModelDespesa'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaDespesa'
 
 
 
 class ControllerDespesa {
     async save(req, res) {
         try {
-            const { data } = req.body
-            if (Validation.ValidaDespesa(data)) {
+            const { descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao } = req.body
+            if (Validation.ValidaDespesa({ descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao })) {
                 return res.status(422).json({
                     message: "Erro de Validação nos dados da Despesa"
                 })
             } else {
-                const uuid = await ModelDespesa.save({ ...data, idEmpresa: req.idEmpresa })
+                const uuid = await ModelDespesa.save({ descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao, idEmpresa: req.idEmpresa })
                 return res.status(201).json({
                     result: uuid
                 })
@@ -71,13 +71,13 @@ class ControllerDespesa {
     async update(req, res) {
         try {
             const uuid = req.params.uuid
-            const { data } = req.body
-            if (Validation.ValidaDespesa(data)) {
+            const { descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao } = req.body
+            if (Validation.ValidaDespesa({ descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao })) {
                 return res.status(422).json({
                     message: "Erro na Validação dos dados da despesa"
                 })
             } else {
-                const result = await ModelDespesa.update(data, req.idEmpresa, uuid)
+                const result = await ModelDespesa.update({ descricaoDespesa, data, valor, despesaPaga, idFormaPagamento, observacao }, req.idEmpresa, uuid)
                 return res.status(201).json({
                     result
                 })

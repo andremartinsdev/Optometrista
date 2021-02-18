@@ -12,7 +12,7 @@ class ModelPaciente {
   }
 
   async update(paciente, uuid = "", idEmpresa) {
-    await knex('paciente').update(paciente).where('uuid', '=', uuid).where('idEmpresa','=', idEmpresa)
+    await knex('paciente').update(paciente).where('uuid', '=', uuid).andWhere('idEmpresa','=', idEmpresa)
   }
 
   async delete(uuid = "", idEmpresa) {

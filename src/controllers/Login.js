@@ -8,10 +8,12 @@ class ControllerLogin {
                 cpfcnpj: cpfcnpj,
                 senha: senha
             })
-    
+            
             if (user.data.Sucesso) {
                 req.session.idEmpresa = user.data.idEmpresa;
                 return res.status(201).json({ liberado: true })
+            }else{
+                return res.json(user.data)
             }
         } catch (error) {
             req.session.idEmpresa = user.data.idEmpresa;

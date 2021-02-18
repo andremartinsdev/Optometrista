@@ -31,6 +31,29 @@ class ModelFichaClinica {
     return result
   }
 
+  async readPagination(idPaciente, idEmpresa, dataInicial, dataFinal, page, limit) {
+    const result = await knex('fichaclinica').select()
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+      .limit(limit).offset((page - 1) * limit)
+    const total = await knex('fichaclinica')
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+
+      .count('idEmpresa as count')
+    return {
+      result,
+      total
+    }
+    
+  }
+
+  
+
   async delete(uuid = "", idEmpresa) {
     await knex('fichaclinica').delete()
       .where('uuid', '=', uuid)

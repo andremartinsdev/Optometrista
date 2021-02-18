@@ -1,18 +1,17 @@
 import ModelFichaClinica from '../models/ModelFichaClinica'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaFichaClinica'
 
 
 class ControllerFichaClinica {
   async save(req, res) {
     try {
-      const { data } = req.body
-      if (Validation.ValidarFicha(data)) {
+      const { idConsulta, idPaciente, data, json_fichaClinica } = req.body
+      if (Validation.ValidarFicha({idConsulta, idPaciente, data})) {
         return res.status(422).json({
           message: 'Ocorreu um erro de validação, dados invalidos'
         })
       } else {
-        const { json_fichaClinica } = req.body
-        const uuid = await ModelFichaClinica.save({ ...data, idEmpresa: req.idEmpresa }, json_fichaClinica)
+        const uuid = await ModelFichaClinica.save({ idConsulta, idPaciente, data, idEmpresa: req.idEmpresa }, json_fichaClinica)
         return res.status(201).json({
           message: 'Ficha Clínica registrada com sucesso.',
           result: uuid
@@ -42,10 +41,29 @@ class ControllerFichaClinica {
     }
   }
 
+  async readPagination(req, res) {
+    try {
+      const idPaciente = req.params.idPaciente;
+      const dataInicial = req.params.dataInicial;
+      const dataFinal = req.params.dataFinal;
+      const { page = 1, limit = 5 } = req.query;
+
+      const result = await ModelFichaClinica.readPagination(idPaciente, req.idEmpresa, dataInicial, dataFinal, page, limit)
+      return res.status(201).json({
+        result
+      })
+    } catch (error) {
+      return res.status(500).json({
+        message: "Erro ao consultar ficha clinica"
+      })
+    }
+  }
+  
+
   async update(req, res) {
     try {
       const { data } = req.body
-      if (Validation.ValidarFicha(data)) {
+      if (!data.json_fichaClinica) {
         return res.status(422).json({
           message: 'Ocorreu um erro de validação, dados invalidos'
         })

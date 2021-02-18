@@ -1,16 +1,16 @@
 import ModelPrescrissaoOculos from '../models/ModelPrescricaoOculos'
-import Validation from '../services/Validation'
+import Validation from '../Validation/ValidaPrescricaoOculos'
 
 class ControllerPrescrissaoOculos {
   async save(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaPrecricaoOculos(data)){
+      const { idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao } = req.body
+      if(Validation.ValidaPrecricaoOculos({idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao})){
         return res.status(422).json({
           message: 'Erro de validação nos dados da Prescrição',
         })
       }else{
-        const uuid = await ModelPrescrissaoOculos.save({ ...data, idEmpresa: req.idEmpresa })
+        const uuid = await ModelPrescrissaoOculos.save({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao, idEmpresa: req.idEmpresa })
         return res.status(201).json({
           message: 'Prescrição registrado com sucesso.',
           uuid: uuid
@@ -25,14 +25,14 @@ class ControllerPrescrissaoOculos {
 
   async update(req, res) {
     try {
-      const { data } = req.body
-      if(Validation.ValidaPrecricaoOculos(data)){
+      const { idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao } = req.body
+      if(Validation.ValidaPrecricaoOculos({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao })){
         return res.status(422).json({
           message: 'Erro de validação dos dados da Prescrição'
         })
       }else{
         const uuid = String(req.params.uuid)
-        await ModelPrescrissaoOculos.update(data, uuid)
+        await ModelPrescrissaoOculos.update({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, adicao, observacao, idEmpresa: req.idEmpresa }, uuid)
         return res.status(201).json({
           message: 'Prescrição atualizada com sucesso.'
         })

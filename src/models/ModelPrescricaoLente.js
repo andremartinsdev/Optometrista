@@ -3,11 +3,13 @@ import { v4 } from 'uuid'
 
 class ModelPrescricaoLente {
   async save(prescricaoOculos) {
+    const uuid = v4();
     const result = await knex('prescricao_lente').insert({
       ...prescricaoOculos,
-      uuid: v4()
+       uuid
     })
-    return result[0]
+   
+    return {idPrescricaoLente: result[0],  uuid}
   }
 
   async update(prescricaoOculos, uuid = "") {

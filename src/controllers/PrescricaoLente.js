@@ -5,6 +5,7 @@ class ControllerPrescrissaoLente {
   async save(req, res) {
     try {
       const { idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao } = req.body
+      console.log(Validation.ValidaPrecricaoLente({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao }))
       if(Validation.ValidaPrecricaoLente({ idConsulta, idPaciente, data, od_esferico, od_cilindrico, od_eixo, od_av, oe_esferico, oe_cilindrico, oe_eixo, oe_av, lente, observacao })){
         return res.status(422).json({
           message: 'Erro na validação dos dados da Prescrição - Lente',

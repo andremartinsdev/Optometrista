@@ -78,7 +78,8 @@ class ControllerPrescrissaoOculos {
       const idPaciente = req.params.idPaciente;
         const dataInicial = req.params.dataInicial;
         const dataFinal = req.params.dataFinal;
-        const result = await ModelPrescrissaoOculos.read(idPaciente, req.idEmpresa, dataInicial, dataFinal)
+        const { page = 1, limit = 5 } = req.query;
+        const result = await ModelPrescrissaoOculos.read(idPaciente, req.idEmpresa, dataInicial, dataFinal, page, limit)
         res.status(201).json({
           result
         })

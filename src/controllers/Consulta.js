@@ -6,6 +6,7 @@ class ControllerConsulta {
   async save(req, res) {
     try {
       const { idPaciente, data, titulo } = req.body
+      console.log({ idPaciente, data, titulo })
       if(Validation.ValidaConsulta({ idPaciente, data, titulo })){
         return res.status(422).json({
           message: 'Erro na Validação dos dados da Consulta',

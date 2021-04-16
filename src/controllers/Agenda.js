@@ -8,6 +8,7 @@ class ControllerAgenda {
     try {
       const { idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
         horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao } = req.body
+       
       if (Validation.ValidaAgendamento({
         idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
         horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao
@@ -16,6 +17,7 @@ class ControllerAgenda {
           message: 'Ocorreu um erro de Validação'
         })
       } else {
+        
         const uuid = await ModelAgenda.save({
           idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
           horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao, idEmpresa: req.idEmpresa
@@ -26,6 +28,7 @@ class ControllerAgenda {
         })
       }
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: 'Erro ao Registrar Agendamento',
       })

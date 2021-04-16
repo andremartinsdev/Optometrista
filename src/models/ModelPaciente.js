@@ -19,6 +19,8 @@ class ModelPaciente {
     await knex('paciente').delete()
       .where('uuid', '=', uuid)
       .andWhere('idEmpresa','=', idEmpresa)
+
+      
   }
 
   async findById(uuid = "", idEmpresa) {

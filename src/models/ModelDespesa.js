@@ -35,6 +35,24 @@ class ModelDespesa {
         return result
       }
     
+
+      async countFormaPagamento(idFormaPagamento, idEmpresa){
+        const result = await knex('despesa').count('idFormaPagamento as formaPagamento')
+        .where('idEmpresa', '=', idEmpresa)
+        .andWhere('idFormaPagamento', '=', idFormaPagamento)
+    
+        return result
+      }
+
+      
+  async countOticaParceira(idOticaParceira, idEmpresa){
+    const result = await knex('despesa').count('idOticaParceira as oticas')
+    .where('idEmpresa', '=', idEmpresa)
+    .andWhere('idOticaParceira', '=', idOticaParceira)
+
+    return result
+  }
+
     async update(despesa, idEmpresa, uuid){
         const result = await knex('despesa').update(despesa)
         .where('idEmpresa','=', idEmpresa)

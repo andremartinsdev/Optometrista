@@ -31,6 +31,14 @@ class ModelFichaClinica {
     return result
   }
 
+  async countPaciente(idPaciente, idEmpresa){
+    const result = await knex('fichaclinica').count('idPaciente as pacientes')
+    .where('idEmpresa', '=', idEmpresa)
+    .andWhere('idPaciente', '=', idPaciente)
+
+    return result
+  }
+
   async readPagination(idPaciente, idEmpresa, dataInicial, dataFinal, page, limit) {
     const result = await knex('fichaclinica').select()
       .where('idEmpresa', '=', idEmpresa)

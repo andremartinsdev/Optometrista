@@ -11,6 +11,7 @@ class ControllerLogin {
 
             if (user.data.Sucesso) {
                 const token = generateToken(user.data.idEmpresa);
+                console.log("entrou login")
                 return res.status(201).json({
                     token: token
                 })

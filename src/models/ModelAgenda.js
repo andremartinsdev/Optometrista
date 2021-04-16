@@ -3,11 +3,13 @@ import { v4 } from 'uuid'
 
 class ModelAgenda {
   async save(data) {
+    
     const uuid = v4();
     const result = await knex('agenda').insert({
       ...data,
       uuid
     })
+    console.log(result)
     return {
       uuid,
       idAgendamento: result
@@ -251,6 +253,31 @@ class ModelAgenda {
     return result
   }
 
+  async countPaciente(idPaciente, idEmpresa){
+    const result = await knex('agenda').count('idPaciente as pacientes')
+    .where('idEmpresa', '=', idEmpresa)
+    .andWhere('idPaciente', '=', idPaciente)
+
+    return result
+  }
+
+  async countFormaPagamento(idFormaPagamento, idEmpresa){
+    const result = await knex('agenda').count('idFormaPagamento as formaPagamento')
+    .where('idEmpresa', '=', idEmpresa)
+    .andWhere('idFormaPagamento', '=', idFormaPagamento)
+
+    return result
+  }
+
+  async countOticaParceira(idOticaParceira, idEmpresa){
+    const result = await knex('agenda').count('idOticaParceira as oticas')
+    .where('idEmpresa', '=', idEmpresa)
+    .andWhere('idOticaParceira', '=', idOticaParceira)
+
+    return result
+  }
+
+  
 
   async readDateVencimento(idEmpresa, dataAtual) {
     const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'paciente.dataNascimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.procedimento', 'agenda.horario', 'agenda.uuid', 'agenda.atendido', 'agenda.valorConsulta', 'agenda.dataVencimento')

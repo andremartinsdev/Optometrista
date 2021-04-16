@@ -1,4 +1,6 @@
 import ModelPaciente from '../models/ModelPaciente'
+import ModelAgenda from '../models/ModelAgenda'
+import ModelFicha from '../models/ModelFichaClinica'
 import Validation from '../Validation/ValidaPaciente'
 
 class ControllerPaciente {
@@ -49,11 +51,21 @@ class ControllerPaciente {
     try {
       const uuid = String(req.params.uuid)
       const idEmpresa = req.idEmpresa
+      const paciente = await ModelPaciente.findById(uuid, idEmpresa)
+      const resultAgenda = await ModelAgenda.countPaciente(paciente.idPaciente, idEmpresa)
+      const resultFicha = await ModelFicha.countPaciente(paciente.idPaciente, idEmpresa)
+      if(resultAgenda[0].pacientes > 0 || resultFicha[0].pacientes > 0){
+        return res.status(409).json({
+          message: `Paciente vinculado há registro(s) : Agenda =  ${resultAgenda[0].pacientes} Ficha Clínica =  ${resultFicha[0].pacientes} `
+        })
+      }
+     
       await ModelPaciente.delete(uuid, idEmpresa)
       return res.status(201).json({
         message: 'Paciente deletado com sucesso.'
       })
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: 'Erro ao deletar paciente'
       })
@@ -122,6 +134,7 @@ class ControllerPaciente {
   async readAll(req, res) {
     try {
       const result = await ModelPaciente.readAll(req.idEmpresa)
+      console.log("entrouu paciente")
       return res.status(201).json({
         result
       })

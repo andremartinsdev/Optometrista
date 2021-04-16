@@ -10,6 +10,8 @@ import { Router } from 'express'
  import RouterOticaParceira from './OticasParceiras.routes'
  import RouterDespesa from './Despesa.routes'
  import RouterReceita from './Receita.routes'
+ import RouterLaudo from './Laudo.routes'
+ import RouterClinica from './Clinica.routes'
 
 const router = Router()
 
@@ -24,5 +26,7 @@ const router = Router()
  router.use('/OticasParceiras', RouterOticaParceira)
  router.use('/Despesa', RouterDespesa)
  router.use('/Receita', RouterReceita)
+ router.use('/Laudo', RouterLaudo)
+ router.use('/Clinica', RouterClinica)
 
 export default router

@@ -29,13 +29,24 @@ class ModelPrescricaoLente {
     return result
   }
 
-  async read(idPaciente, idEmpresa, dataInicial, dataFinal) {
+  async read(idPaciente, idEmpresa, dataInicial, dataFinal, limit, page) {
     const result = await knex('prescricao_lente').select()
       .where('idEmpresa', '=', idEmpresa)
       .andWhere('idPaciente', '=', idPaciente)
       .andWhere('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
-
+      .limit(limit).offset((page - 1) * limit)
+      const total = await knex('prescricao_lente')
+        .where('idEmpresa', '=', idEmpresa)
+        .andWhere('idPaciente', '=', idPaciente)
+        .andWhere('data', '>=', dataInicial)
+        .andWhere('data', '<=', dataFinal)
+  
+        .count('idEmpresa as count')
+      return {
+        result,
+        total
+      }
       return result
   }
 }

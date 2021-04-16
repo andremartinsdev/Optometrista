@@ -20,6 +20,29 @@ class ModelFormaDePagamento {
 
         return result
     }
+
+
+    async update(data, uuid = "", idEmpresa) {
+        await knex('formapagamento').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
+      }
+
+    async findById(idEmpresa, uuid){
+        const result = await knex('formapagamento').select()
+        .where('idEmpresa','=', idEmpresa)
+        .andWhere('uuid', '=', uuid)
+
+        return result
+    }
+
+    async delete(uuid, idEmpresa){
+        const result = await knex('formapagamento').delete()
+        .where('idEmpresa', '=', idEmpresa)
+        .andWhere('uuid','=', uuid)
+
+        return result
+    }
+
+    
 }
 
 export default new ModelFormaDePagamento();

@@ -10,6 +10,5 @@ router.get('/:uuid', ControllerPaciente.findById)
 router.get('/pagination/page', ControllerPaciente.pagination)
 router.get('/readCpf/:cpf', ControllerPaciente.readCpf)
 router.get('/readName/:nome', ControllerPaciente.readName)
-router.get('/read/all', ControllerPaciente.readAll)
 
 export default router

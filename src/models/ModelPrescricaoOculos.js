@@ -28,14 +28,26 @@ class ModelPrecricaoOculos {
     return result
   }
 
-  async read(idPaciente, idEmpresa, dataInicial, dataFinal) {
+  async read(idPaciente, idEmpresa, dataInicial, dataFinal, page, limit) {
     const result = await knex('prescricao_oculos').select()
       .where('idEmpresa', '=', idEmpresa)
       .andWhere('idPaciente', '=', idPaciente)
       .andWhere('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
+      .limit(limit).offset((page - 1) * limit)
+    const total = await knex('prescricao_oculos')
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
 
-      return result
+      .count('idEmpresa as count')
+    return {
+      result,
+      total
+    }
+
+   
   }
 }
 

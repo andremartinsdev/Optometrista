@@ -11,7 +11,7 @@ function generateToken(idEmpresa) {
 
 function verify(req, res, next) {
     const authHeaders = req.headers.authorization;
-
+    console.log("entroou midware")
     if (!authHeaders) {
         return res.status(401).json({
             message: 'Token não passado.'

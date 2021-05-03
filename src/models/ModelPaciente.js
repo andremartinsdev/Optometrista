@@ -11,28 +11,24 @@ class ModelPaciente {
     return uuid
   }
 
-  async update(paciente, uuid = "", idEmpresa) {
-    await knex('paciente').update(paciente).where('uuid', '=', uuid).andWhere('idEmpresa','=', idEmpresa)
+  async update(paciente, uuid, idEmpresa) {
+    await knex('paciente')
+      .update(paciente)
+      .where('uuid', '=', uuid)
+      .andWhere('idEmpresa', '=', idEmpresa)
   }
 
-  async delete(uuid = "", idEmpresa) {
+  async delete(uuid, idEmpresa) {
     await knex('paciente').delete()
       .where('uuid', '=', uuid)
-      .andWhere('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa', '=', idEmpresa)
   }
 
-  async findById(uuid = "", idEmpresa) {
+  async findById(uuid, idEmpresa) {
     const result = await knex('paciente').select()
       .where('uuid', '=', uuid)
-      .andWhere('idEmpresa','=', idEmpresa)
+      .andWhere('idEmpresa', '=', idEmpresa)
       .first()
-
-    return result
-  }
-
-  async readAll(idEmpresa) {
-    const result = await knex('paciente').select()
-      .where('idEmpresa', '=', idEmpresa)
 
     return result
   }
@@ -47,15 +43,15 @@ class ModelPaciente {
   }
 
 
-  
-  async pagination(idEmpresa, limit, page){
+
+  async pagination(idEmpresa, limit, page) {
     const result = await knex('paciente').select()
-    .where('idEmpresa', '=', idEmpresa)
-    .limit(limit).offset((page - 1) * limit)
+      .where('idEmpresa', '=', idEmpresa)
+      .limit(limit).offset((page - 1) * limit)
 
     const total = await knex('paciente')
-    .where('idEmpresa', '=', idEmpresa)
-    .count('idEmpresa as count')
+      .where('idEmpresa', '=', idEmpresa)
+      .count('idEmpresa as count')
 
     return {
       result,

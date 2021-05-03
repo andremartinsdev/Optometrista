@@ -5,7 +5,7 @@ export default knex({
   connection: {
     host: 'localhost',
     user: 'root',
-    password: '',
+    password: '123456',
     database: 'opto'
   }
 })

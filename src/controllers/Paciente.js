@@ -1,16 +1,17 @@
+import PacienteEntity from '../entities/Paciente'
 import ModelPaciente from '../models/ModelPaciente'
 import Validation from '../Validation/ValidaPaciente'
 
 class ControllerPaciente {
   async save(req, res) {
     try {
-      const { nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone } = req.body
-      if(Validation.ValidarPaciente({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone })){
+      const paciente = new PacienteEntity(req.body)
+      if (Validation.ValidarPaciente(paciente)) {
         return res.status(422).json({
           message: 'Ocorreu um erro de validação, dados invalidos'
-        })      
+        })
       }
-      const uuid = await ModelPaciente.save({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone , idEmpresa: req.idEmpresa })
+      const uuid = await ModelPaciente.save({ ...paciente, idEmpresa: req.idEmpresa })
       return res.status(201).json({
         message: 'Paciente registrado com sucesso.',
         uuid: uuid
@@ -24,19 +25,19 @@ class ControllerPaciente {
 
   async update(req, res) {
     try {
-      const { nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone } = req.body
-      if(Validation.ValidarPaciente({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone })){
+      const uuid = String(req.params.uuid)
+      const idEmpresa = req.idEmpresa
+      const paciente = new PacienteEntity(req.body, uuid)
+      if (Validation.ValidarPaciente(paciente)) {
         return res.status(201).json({
           message: 'Erro de validação dos dados do Paciente'
         })
-      }else{
-        const uuid = String(req.params.uuid)
-        const idEmpresa = req.idEmpresa
-        await ModelPaciente.update({ nomePaciente, dataNascimento, cpf, rg, email, endereco, cidade, estado, telefone }, uuid, idEmpresa)
-        return res.status(201).json({
-          message: 'Paciente atualizado com sucesso.'
-        })
       }
+
+      await ModelPaciente.update({...paciente }, uuid, idEmpresa)
+      return res.status(201).json({
+        message: 'Paciente atualizado com sucesso.'
+      })
 
     } catch (error) {
       return res.status(500).json({
@@ -95,13 +96,13 @@ class ControllerPaciente {
       const cpf = String(req.params.cpf)
       const result = await ModelPaciente.readParams(req.idEmpresa, cpf, 'cpf')
       return res.status(201).json({
-       result
+        result
       })
-      
+
     } catch (error) {
       return res.status(500).json({
         message: 'Erro ao pesquisar por cpf'
-       })
+      })
     }
   }
 
@@ -111,24 +112,10 @@ class ControllerPaciente {
       const result = await ModelPaciente.readParams(req.idEmpresa, nomePaciente, 'nomePaciente')
       return res.status(201).json({
         result
-       })
-    } catch (error) {
-      return res.status(500).json({
-        message:"Erro ao pesquisar pelo Nome"
-       })
-    }
-  }
-
-  async readAll(req, res) {
-    try {
-      const result = await ModelPaciente.readAll(req.idEmpresa)
-      return res.status(201).json({
-        result
       })
-      
     } catch (error) {
       return res.status(500).json({
-        message: "Erro ao pesquisar todos Paciente"
+        message: "Erro ao pesquisar pelo Nome"
       })
     }
   }

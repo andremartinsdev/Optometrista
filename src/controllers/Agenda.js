@@ -8,23 +8,21 @@ class ControllerAgenda {
     try {
       const { idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
         horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao } = req.body
-      if (Validation.ValidaAgendamento({
-        idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao
-      })) {
-        res.status(422).json({
+
+      if (Validation.ValidaAgendamento(req.body)) {
+        return res.status(422).json({
           message: 'Ocorreu um erro de Validação'
         })
-      } else {
-        const uuid = await ModelAgenda.save({
-          idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-          horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao, idEmpresa: req.idEmpresa
-        })
-        return res.status(201).json({
-          message: 'Agendamento registrado com sucesso.',
-          result: uuid
-        })
       }
+
+      const uuid = await ModelAgenda.save({
+        idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
+        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao, idEmpresa: req.idEmpresa
+      })
+      return res.status(201).json({
+        message: 'Agendamento registrado com sucesso.',
+        result: uuid
+      })
     } catch (error) {
       return res.status(500).json({
         message: 'Erro ao Registrar Agendamento',
@@ -33,7 +31,7 @@ class ControllerAgenda {
 
   }
 
-  async  paginationAllAgenda(req, res){
+  async paginationAllAgenda(req, res) {
     try {
       const dataInicial = req.params.dataInicial
       const dataFinal = req.params.dataFinal
@@ -123,8 +121,10 @@ class ControllerAgenda {
       } else {
         const uuid = String(req.params.uuid)
         const idEmpresa = req.idEmpresa
-        await ModelAgenda.update({ idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-          horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao }, uuid, idEmpresa)
+        await ModelAgenda.update({
+          idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
+          horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao
+        }, uuid, idEmpresa)
         return res.status(201).json({
           message: 'Agendamento atualizada com sucesso.'
         })
@@ -136,21 +136,21 @@ class ControllerAgenda {
     }
   }
 
-  async updateIdConsultAtendido(req, res){
+  async updateIdConsultAtendido(req, res) {
     try {
       const { idConsulta, atendido } = req.body
-      if(Validation.ValidaUpdateIdConsultAtendido({idConsulta, atendido})){
+      if (Validation.ValidaUpdateIdConsultAtendido({ idConsulta, atendido })) {
         return res.status(422).json({
           message: 'Erro ao atualizar dados do agendamento. #updateIdConsultAtendido'
         })
-      }else{
+      } else {
         const uuid = String(req.params.uuid)
-        await ModelAgenda.updateIdConsultAtendido({idConsulta, atendido}, uuid, req.idEmpresa)
+        await ModelAgenda.updateIdConsultAtendido({ idConsulta, atendido }, uuid, req.idEmpresa)
         return res.status(201).json({
           message: 'Agendamento atualizada com sucesso. #updateIdConsultAtendido'
         })
       }
-      
+
     } catch (error) {
       return res.status(500).json({
         message: 'Erro ao Atualizar Agendamento  #updateIdConsultAtendido'
@@ -158,21 +158,21 @@ class ControllerAgenda {
     }
   }
 
-  async updateIdConsultAtendidoDtVencimento(req, res){
+  async updateIdConsultAtendidoDtVencimento(req, res) {
     try {
       const { idConsulta, atendido, dataVencimento } = req.body
-      if(Validation.ValidaUpdateIdConsultAtendidoDtVencimento({idConsulta, atendido, dataVencimento})){
+      if (Validation.ValidaUpdateIdConsultAtendidoDtVencimento({ idConsulta, atendido, dataVencimento })) {
         return res.status(422).json({
           message: 'Erro ao atualizar dados do agendamento. #updateIdConsultAtendido'
         })
-      }else{
+      } else {
         const uuid = String(req.params.uuid)
-        await ModelAgenda.updateIdConsultAtendidoDtVencimento({idConsulta, atendido, dataVencimento}, uuid, req.idEmpresa)
+        await ModelAgenda.updateIdConsultAtendidoDtVencimento({ idConsulta, atendido, dataVencimento }, uuid, req.idEmpresa)
         return res.status(201).json({
           message: 'Agendamento atualizada com sucesso. #updateIdConsultAtendido'
         })
       }
-      
+
     } catch (error) {
       return res.status(500).json({
         message: 'Erro ao Atualizar Agendamento  #updateIdConsultAtendido'
@@ -234,7 +234,7 @@ class ControllerAgenda {
   }
 
 
-  
+
   async readDateRelatorioReceita(req, res) {
     try {
       const idEmpresa = req.idEmpresa
@@ -342,7 +342,7 @@ class ControllerAgenda {
     }
   }
 
-  
+
 
   async readDateInner(req, res) {
     try {

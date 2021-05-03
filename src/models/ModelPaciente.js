@@ -3,12 +3,7 @@ import { v4 } from 'uuid'
 
 class ModelPaciente {
   async save(paciente) {
-    const uuid = v4();
-    const result = await knex('paciente').insert({
-      ...paciente,
-      uuid
-    })
-    return uuid
+    await knex('paciente').insert(paciente)
   }
 
   async update(paciente, uuid, idEmpresa) {
@@ -44,10 +39,16 @@ class ModelPaciente {
 
 
 
-  async pagination(idEmpresa, limit, page) {
+  async pagination(idEmpresa, campo, condicao, value, limit, page) {
+    if (condicao == 'like') {
+      value = `%${value}%`
+    }
+    
     const result = await knex('paciente').select()
       .where('idEmpresa', '=', idEmpresa)
-      .limit(limit).offset((page - 1) * limit)
+      .andWhere(campo, condicao, value)
+      .limit(limit).offset(((page -1) * limit))
+      .orderBy(campo, 'asc')
 
     const total = await knex('paciente')
       .where('idEmpresa', '=', idEmpresa)

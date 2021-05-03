@@ -2,7 +2,6 @@ import validate from 'validate.js'
 
 function ValidarPaciente(data) {
     const constraints = {
-
         nomePaciente: {
             presence: {
                 allowEmpty: false,
@@ -10,7 +9,7 @@ function ValidarPaciente(data) {
             },
             length: {
                 maximum: 50,
-                message: 'O campo Nome não pode ter mais de 100 caracteres.'
+                message: 'O campo Nome não pode ter mais de 50 caracteres.'
             },
             length: {
                 minimum: 5,
@@ -66,6 +65,4 @@ function ValidarPaciente(data) {
 }
 
 
-export default {
-    ValidarPaciente
-}
+export default ValidarPaciente

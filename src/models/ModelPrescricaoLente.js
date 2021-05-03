@@ -6,10 +6,10 @@ class ModelPrescricaoLente {
     const uuid = v4();
     const result = await knex('prescricao_lente').insert({
       ...prescricaoOculos,
-       uuid
+      uuid
     })
-   
-    return {idPrescricaoLente: result[0],  uuid}
+
+    return { idPrescricaoLente: result[0], uuid }
   }
 
   async update(prescricaoOculos, uuid = "") {
@@ -36,18 +36,17 @@ class ModelPrescricaoLente {
       .andWhere('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
       .limit(limit).offset((page - 1) * limit)
-      const total = await knex('prescricao_lente')
-        .where('idEmpresa', '=', idEmpresa)
-        .andWhere('idPaciente', '=', idPaciente)
-        .andWhere('data', '>=', dataInicial)
-        .andWhere('data', '<=', dataFinal)
-  
-        .count('idEmpresa as count')
-      return {
-        result,
-        total
-      }
-      return result
+    const total = await knex('prescricao_lente')
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+
+      .count('idEmpresa as count')
+    return {
+      result,
+      total
+    }
   }
 }
 

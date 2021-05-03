@@ -7,15 +7,15 @@ class ControllerConsulta {
     try {
       const { idPaciente, data, titulo } = req.body
       console.log({ idPaciente, data, titulo })
-      if(Validation.ValidaConsulta({ idPaciente, data, titulo })){
+      if (Validation.ValidaConsulta({ idPaciente, data, titulo })) {
         return res.status(422).json({
           message: 'Erro na Validação dos dados da Consulta',
         })
-      }else{
+      } else {
         const uuid = await ModelConsulta.save({ idPaciente, data, titulo, idEmpresa: req.idEmpresa })
         return res.status(201).json({
           message: 'Consulta registrada com sucesso.',
-          result : uuid
+          result: uuid
         })
       }
     } catch (error) {
@@ -28,11 +28,11 @@ class ControllerConsulta {
   async update(req, res) {
     try {
       const { idPaciente, data, titulo } = req.body
-      if(Validation.ValidaConsulta({ idPaciente, data, titulo })){
+      if (Validation.ValidaConsulta({ idPaciente, data, titulo })) {
         return res.status(422).json({
           message: 'Erro na Validação dos dados da Consulta',
         })
-      }else{
+      } else {
         const idEmpresa = req.idEmpresa
         const uuid = String(req.params.uuid)
         await ModelConsulta.update(data, uuid, idEmpresa)

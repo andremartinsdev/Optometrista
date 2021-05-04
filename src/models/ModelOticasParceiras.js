@@ -2,30 +2,20 @@ import knex from '../config/db'
 import { v4 } from 'uuid'
 
 class ModelOticasParceiras {
-    async save(data){
-        const uuid = v4();
-        const result = await knex('oticaparceira').insert({
-            uuid,
-            ...data
-        })
-        return ({
-          uuid,
-          idOticaParceira: result  
-        })
+    async save(data) {
+        await knex('oticaparceira').insert(data)
     }
 
-    async delete(uuid, idEmpresa){
-        const result = await knex('oticaparceira').delete()
-        .where('idEmpresa', '=', idEmpresa)
-        .andWhere('uuid','=', uuid)
-
-        return result
+    async delete(uuid, idEmpresa) {
+        await knex('oticaparceira').delete()
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
     }
 
-    async findById(idEmpresa, uuid){
+    async findById(idEmpresa, uuid) {
         const result = await knex('oticaparceira').select()
-        .where('idEmpresa','=', idEmpresa)
-        .andWhere('uuid', '=', uuid)
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
 
         return result
     }
@@ -33,12 +23,12 @@ class ModelOticasParceiras {
 
     async update(data, uuid = "", idEmpresa) {
         await knex('oticaparceira').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
-      }
+    }
 
 
-    async read(idEmpresa){
-        const result = await knex('oticaparceira').select()
-        .where('idEmpresa','=', idEmpresa)
+    async read(idEmpresa) {
+        const result = await knex('oticaparceira').select(['uuid', 'nome'])
+            .where('idEmpresa', '=', idEmpresa)
 
         return result
     }

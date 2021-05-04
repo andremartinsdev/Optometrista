@@ -1,48 +1,86 @@
 import ModelAgenda from '../models/ModelAgenda'
 import Validation from '../Validation/ValidaAgenda'
-
+import AgendaEntity from '../entities/Agenda'
+import ModelCliente from '../models/ModelPaciente'
+import ModelFormaP from '../models/ModelFormaDePagamento'
+import ModelOptParceira from '../models/ModelOticasParceiras'
 
 class ControllerAgenda {
-
   async save(req, res) {
     try {
-      const { idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao } = req.body
+      const idEmpresa = String(req.idEmpresa)
+      const agenda = new AgendaEntity({ ...req.body, idEmpresa });
+      const validate = Validation.ValidaAgendamento(agenda)
 
-      if (Validation.ValidaAgendamento({
-        idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao
-      })) {
-        res.status(422).json({
+      if (validate) {
+        return res.status(422).json({
           message: 'Ocorreu um erro de Validação'
-        })
-      } else {
-
-        const uuid = await ModelAgenda.save({
-          idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-          horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao, idEmpresa: req.idEmpresa
-        })
-        return res.status(201).json({
-          message: 'Agendamento registrado com sucesso.',
-          result: uuid
         })
       }
 
-      const uuid = await ModelAgenda.save({
-        idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao, idEmpresa: req.idEmpresa
-      })
-      return res.status(201).json({
-        message: 'Agendamento registrado com sucesso.',
-        result: uuid
-      })
+      const [paciente, formaPgmento, OptParceira] = await Promise.all([
+        ModelCliente.findById(agenda.idPaciente, idEmpresa, ['uuid', 'idPaciente']),
+        // ModelFormaP.findById(agenda.idFormaPagamento, idEmpresa, ['uuid', 'idFormaPagamento']),
+        // ModelOptParceira.findById(agenda.idOticaParceira, idEmpresa, ['uuid', 'idOticaParceira'])
+      ])
+
+      agenda.idPaciente = paciente.idPaciente
+      // agenda.idFormaPagamento = formaPgmento.idFormaPagamento
+      // agenda.idOticaParceira = OptParceira.idOticaParceira
+
+      await ModelAgenda.save(agenda)
+      return res.status(201).json({ uuid: agenda.uuid })
     } catch (error) {
       console.log(error)
       return res.status(500).json({
         message: 'Erro ao Registrar Agendamento',
       })
     }
+  }
 
+  async update(req, res) {
+    try {
+      const uuid = String(req.params.uuid)
+      const idEmpresa = String(req.idEmpresa)
+      const agenda = new AgendaEntity({ ...req.body, uuid }, uuid);
+
+      if (!agenda.idFormaPagamento) {
+        return res.status(422).json({
+          message: 'Ocorreu um erro de Validação'
+        })
+      }
+
+      const agendamento = await ModelAgenda.findById(agenda.uuid, idEmpresa)
+
+      const [formaPgmento, OptParceira] = await Promise.all([
+        ModelFormaP.findById(idEmpresa, agenda.idFormaPagamento, ['uuid', 'idFormaPagamento']),
+        ModelOptParceira.findById(idEmpresa, agenda.idOticaParceira, ['uuid', 'idOticaParceira'])
+      ])
+
+      agenda.idFormaPagamento = formaPgmento[0].idFormaPagamento
+      agenda.idOticaParceira = OptParceira[0].idOticaParceira
+
+      await ModelAgenda.update({ ...agendamento, ...agenda }, idEmpresa)
+      return res.status(204).json({})
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({
+        message: 'Erro ao Atualizar Agendamento'
+      })
+    }
+  }
+
+  async delete(req, res) {
+    try {
+      const uuid = String(req.params.uuid)
+      const idEmpresa = String(req.idEmpresa)
+      await ModelAgenda.delete(uuid, idEmpresa)
+      return res.status(204).json({})
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Erro ao excluir Agendamento',
+      })
+    }
   }
 
   async paginationAllAgenda(req, res) {
@@ -80,7 +118,7 @@ class ControllerAgenda {
     try {
       const idEmpresa = req.idEmpresa
       const uuid = String(req.params.uuid)
-      const result = await ModelAgenda.findById(uuid, idEmpresa)
+      const result = await ModelAgenda.readAgendaJoinPaciente(uuid, idEmpresa)
       return res.status(201).json({
         message: 'agenda pesquisada.',
         agendamento: result
@@ -104,48 +142,6 @@ class ControllerAgenda {
     } catch (error) {
       return res.status(500).json({
         message: 'Erro ao pesquisar Agendamento #3',
-      })
-    }
-  }
-
-  async delete(req, res) {
-    try {
-      const uuid = req.params.uuid
-      const idEmpresa = req.idEmpresa
-      const result = await ModelAgenda.delete(uuid, idEmpresa)
-      return res.status(201).json({
-        message: 'agendamento excluido',
-        agendamento: result
-      })
-    } catch (error) {
-      return res.status(500).json({
-        message: 'Erro ao excluir Agendamento',
-      })
-    }
-  }
-
-  async update(req, res) {
-    try {
-      const { idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-        horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao } = req.body
-      if (recebido.length > 1 && idFormaPagamento < 1) {
-        return res.status(422).json({
-          message: 'Erro na validação dos dados do Agendamento'
-        })
-      } else {
-        const uuid = String(req.params.uuid)
-        const idEmpresa = req.idEmpresa
-        await ModelAgenda.update({
-          idPaciente, idFormaPagamento, idOticaParceira, titulo, data, dataVencimento,
-          horario, procedimento, valorConsulta, idConsulta, dataPagamento, atendido, recebido, observacao
-        }, uuid, idEmpresa)
-        return res.status(201).json({
-          message: 'Agendamento atualizada com sucesso.'
-        })
-      }
-    } catch (error) {
-      return res.status(500).json({
-        message: 'Erro ao Atualizar Agendamento'
       })
     }
   }
@@ -247,8 +243,6 @@ class ControllerAgenda {
     }
   }
 
-
-
   async readDateRelatorioReceita(req, res) {
     try {
       const idEmpresa = req.idEmpresa
@@ -301,7 +295,6 @@ class ControllerAgenda {
     }
   }
 
-
   async readDateRelatorioReceitaFormPag(req, res) {
     try {
       const idEmpresa = req.idEmpresa
@@ -337,7 +330,6 @@ class ControllerAgenda {
     }
   }
 
-
   async readDateAgendamentoFinalizadoPagination(req, res) {
     try {
       const idEmpresa = req.idEmpresa
@@ -356,8 +348,6 @@ class ControllerAgenda {
     }
   }
 
-
-
   async readDateInner(req, res) {
     try {
       const idEmpresa = req.idEmpresa
@@ -368,6 +358,7 @@ class ControllerAgenda {
         agendamentos: result
       })
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: 'Erro ao pesquisar Agendamento #44',
       })
@@ -397,8 +388,11 @@ class ControllerAgenda {
       const dataInicial = req.params.dataInicial
       const dataFinal = req.params.dataFinal
       const idPaciente = req.params.idPaciente
-      const result = await ModelAgenda.readDatePaciente(dataInicial, dataFinal, idEmpresa, idPaciente)
-      return res.status(201).json({
+
+      const paciente = await ModelCliente.findById(idPaciente, idEmpresa, ['uuid', 'idPaciente'])
+
+      const result = await ModelAgenda.readDatePaciente(dataInicial, dataFinal, idEmpresa, paciente.idPaciente)
+      return res.status(200).json({
         message: 'agendamentos pesquisados.',
         agendamentos: result
       })

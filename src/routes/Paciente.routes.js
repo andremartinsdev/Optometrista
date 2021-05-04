@@ -8,5 +8,6 @@ router.put('/:uuid', ControllerPaciente.update)
 router.delete('/:uuid', ControllerPaciente.delete)
 router.get('/:uuid', ControllerPaciente.findById)
 router.get('/pagination/page', ControllerPaciente.pagination)
+router.get('/read/all/names', ControllerPaciente.readAllNames)
 
 export default router

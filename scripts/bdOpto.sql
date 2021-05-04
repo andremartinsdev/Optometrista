@@ -67,9 +67,6 @@ CREATE TABLE `prescricao_oculos` (
 );
 
 
-
-
-
 CREATE TABLE `prescricao_lente` (
   `idPrescricaoOculos` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL,
@@ -91,8 +88,6 @@ CREATE TABLE `prescricao_lente` (
   FOREIGN KEY (idConsulta) REFERENCES consulta(idConsulta)
   
 );
-
-
 
 CREATE TABLE `procedimentos` (
   `idProcedimento` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -123,22 +118,23 @@ CREATE TABLE `agenda` (
   `uuid` varchar(36) NOT NULL,
   `idPaciente` int NOT NULL,
   `idEmpresa` int NOT NULL,
-  `idFormaPagamento` int NOT NULL DEFAULT 0,
-  `idOticaParceira` int NOT NULL DEFAULT 0,
+  `idFormaPagamento` int NOT NULL,
+  `idOticaParceira` int NOT NULL,
+  `idProcedimento`int NOT NULL,
   `titulo` varchar(30) DEFAULT NULL,
   `data` date,
   `dataVencimento` date,
   `horario` varchar(10) DEFAULT '00:00',
-  `procedimento` varchar(20) NOT NULL,
   `valorConsulta` decimal(12,2),
-  `idConsulta` int DEFAULT 0,
+  `idConsulta` int,
   `dataPagamento` date,
-  `atendido` boolean DEFAULT 0,
-  `recebido` boolean DEFAULT 0,
+  `atendido` boolean,
+  `recebido` boolean,
   `observacao` varchar(80) DEFAULT NULL,
   FOREIGN KEY (idPaciente) REFERENCES paciente(idPaciente),
   FOREIGN KEY (idFormaPagamento) REFERENCES formapagamento(idFormaPagamento),
-  FOREIGN KEY (idOticaParceira) REFERENCES oticaparceira(idOticaParceira)
+  FOREIGN KEY (idOticaParceira) REFERENCES oticaparceira(idOticaParceira),
+  FOREIGN KEY (idProcedimento) REFERENCES procedimentos(idProcedimento),
 
 );
 
@@ -154,7 +150,7 @@ CREATE TABLE `despesa` (
   `data` date,
   `valor` decimal(12,2) DEFAULT NULL,
   `despesaPaga` boolean,
-  `idFormaPagamento` int NOT NULL DEFAULT 0,
+  `idFormaPagamento` int NOT NULL,
   `observacao` varchar(100) DEFAULT NULL,
   FOREIGN KEY (idFormaPagamento) REFERENCES formapagamento(idFormaPagamento)
 );
@@ -167,7 +163,7 @@ CREATE TABLE `receita` (
   `data` date,
   `valor` decimal(12,2) DEFAULT NULL,
   `receitaPaga` boolean,
-  `idFormaPagamento` int NOT NULL DEFAULT 0,
+  `idFormaPagamento` int NOT NULL,
   `observacao` varchar(100) DEFAULT NULL
 );
 

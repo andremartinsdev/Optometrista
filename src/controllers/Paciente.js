@@ -7,7 +7,8 @@ import ValidarPaciente from '../Validation/ValidaPaciente'
 class ControllerPaciente {
   async save(req, res) {
     try {
-      const paciente = new PacienteEntity(req.body)
+      const idEmpresa = req.idEmpresa
+      const paciente = new PacienteEntity({ ...req.body, idEmpresa })
       const validate = ValidarPaciente(paciente)
 
       if (validate) {
@@ -16,7 +17,7 @@ class ControllerPaciente {
           erros: validate
         })
       }
-      await ModelPaciente.save({ ...paciente, idEmpresa: req.idEmpresa })
+      await ModelPaciente.save(paciente)
       return res.status(201).json({ uuid: paciente.uuid })
     } catch (error) {
       return res.status(500).json({
@@ -29,7 +30,7 @@ class ControllerPaciente {
     try {
       const uuid = String(req.params.uuid)
       const idEmpresa = req.idEmpresa
-      const paciente = new PacienteEntity(req.body, uuid)
+      const paciente = new PacienteEntity({ ...req.body, idEmpresa }, uuid)
 
       const validate = ValidarPaciente(paciente)
       if (validate) {
@@ -97,13 +98,25 @@ class ControllerPaciente {
       const condicao = req.query.like ? 'like' : '='
       const value = decodeURIComponent(Object.values(req.query)[0]) || ''
       const campo = decodeURIComponent(Object.keys(req.query)[0]) || 'nomePaciente'
-      
+
       const data = await ModelPaciente.pagination(req.idEmpresa, campo, condicao, value, limit, page)
       return res.status(200).json(data)
     } catch (error) {
       console.log(error)
       return res.status(500).json({
         message: 'Erro na paginação',
+      })
+    }
+  }
+
+  async readAllNames(req, res) {
+    try {
+      const idEmpresa = req.idEmpresa
+      const result = await ModelPaciente.readAllNames(idEmpresa)
+      return res.status(200).json(result)
+    } catch (error) {
+      return res.status(500).json({
+        message: 'Erro ao pesquisar paciente',
       })
     }
   }

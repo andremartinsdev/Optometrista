@@ -19,8 +19,8 @@ class ModelPaciente {
       .andWhere('idEmpresa', '=', idEmpresa)
   }
 
-  async findById(uuid, idEmpresa) {
-    const result = await knex('paciente').select()
+  async findById(uuid, idEmpresa, colunas = []) {
+    const result = await knex('paciente').select(colunas)
       .where('uuid', '=', uuid)
       .andWhere('idEmpresa', '=', idEmpresa)
       .first()
@@ -37,17 +37,22 @@ class ModelPaciente {
     return result
   }
 
+  async readAllNames(idEmpresa) {
+    const result = await knex('paciente').select(['uuid', 'nomePaciente'])
+      .where('idEmpresa', '=', idEmpresa)
 
+    return result
+  }
 
   async pagination(idEmpresa, campo, condicao, value, limit, page) {
     if (condicao == 'like') {
       value = `%${value}%`
     }
-    
+
     const result = await knex('paciente').select()
       .where('idEmpresa', '=', idEmpresa)
       .andWhere(campo, condicao, value)
-      .limit(limit).offset(((page -1) * limit))
+      .limit(limit).offset(((page - 1) * limit))
       .orderBy(campo, 'asc')
 
     const total = await knex('paciente')

@@ -1,19 +1,8 @@
 import knex from '../config/db'
-import { v4 } from 'uuid'
 
 class ModelAgenda {
   async save(data) {
-    
-    const uuid = v4();
-    const result = await knex('agenda').insert({
-      ...data,
-      uuid
-    })
-    console.log(result)
-    return {
-      uuid,
-      idAgendamento: result
-    }
+    await knex('agenda').insert(data)
   }
 
   async read(idEmpresa) {
@@ -41,7 +30,7 @@ class ModelAgenda {
     }
   }
 
-  async findById(uuid = "", idEmpresa) {
+  async findById(uuid, idEmpresa) {
     const result = await knex('agenda').select()
       .where('uuid', '=', uuid)
       .andWhere('idEmpresa', '=', idEmpresa)
@@ -51,13 +40,18 @@ class ModelAgenda {
   }
 
   async readAgendaJoinPaciente(uuid = "", idEmpresa) {
-    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.uuid AS pacienteUuid', 'paciente.nomePaciente',
-      'paciente.dataNascimento', 'agenda.procedimento', 'agenda.idFormaPagamento', 'agenda.idOticaParceira',
-      'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido',
-      'agenda.recebido', 'agenda.valorConsulta')
+    const result = await knex('agenda').select(
+      [
+        'paciente.uuid AS idPaciente', 'paciente.nomePaciente',
+        'paciente.dataNascimento', 'paciente.titulo',
+        'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido',
+        'agenda.recebido', 'agenda.valorConsulta'
+      ]
+    )
       .where('agenda.uuid', '=', uuid)
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
       .leftJoin('paciente', 'agenda.idPaciente', 'paciente.idPaciente')
+      .leftJoin('procedimentos', 'agenda.idProcedimento', 'procedimentos.idProcedimento')
       .first()
 
     return result
@@ -70,8 +64,8 @@ class ModelAgenda {
   }
 
 
-  async update(data, uuid = "", idEmpresa) {
-    await knex('agenda').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
+  async update(data, idEmpresa) {
+    await knex('agenda').update(data).where('uuid', '=', data.uuid).andWhere('idEmpresa', '=', idEmpresa)
   }
 
 
@@ -200,7 +194,7 @@ class ModelAgenda {
       result,
       total
     }
-   
+
   }
 
   async readDateAgendamentoFinalizado(dataInicial, dataFinal, idEmpresa) {
@@ -214,12 +208,12 @@ class ModelAgenda {
   }
 
   async readDateInner(data, idEmpresa, limit, page) {
-    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'agenda.procedimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
+    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
       .where('agenda.data', '=', data)
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
       .leftJoin('paciente', 'agenda.idPaciente', 'paciente.idPaciente')
-      return result
-   
+    return result
+
   }
 
 
@@ -233,13 +227,13 @@ class ModelAgenda {
       .limit(limit).offset((page - 1) * limit)
     const total = await knex('agenda')
       .where('idEmpresa', '=', idEmpresa)
-      .andWhere('data','=', data)
+      .andWhere('data', '=', data)
       .count('idEmpresa as count')
     return {
       result,
       total
     }
-   
+
   }
 
 
@@ -253,31 +247,31 @@ class ModelAgenda {
     return result
   }
 
-  async countPaciente(idPaciente, idEmpresa){
+  async countPaciente(idPaciente, idEmpresa) {
     const result = await knex('agenda').count('idPaciente as pacientes')
-    .where('idEmpresa', '=', idEmpresa)
-    .andWhere('idPaciente', '=', idPaciente)
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idPaciente', '=', idPaciente)
 
     return result
   }
 
-  async countFormaPagamento(idFormaPagamento, idEmpresa){
+  async countFormaPagamento(idFormaPagamento, idEmpresa) {
     const result = await knex('agenda').count('idFormaPagamento as formaPagamento')
-    .where('idEmpresa', '=', idEmpresa)
-    .andWhere('idFormaPagamento', '=', idFormaPagamento)
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idFormaPagamento', '=', idFormaPagamento)
 
     return result
   }
 
-  async countOticaParceira(idOticaParceira, idEmpresa){
+  async countOticaParceira(idOticaParceira, idEmpresa) {
     const result = await knex('agenda').count('idOticaParceira as oticas')
-    .where('idEmpresa', '=', idEmpresa)
-    .andWhere('idOticaParceira', '=', idOticaParceira)
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('idOticaParceira', '=', idOticaParceira)
 
     return result
   }
 
-  
+
 
   async readDateVencimento(idEmpresa, dataAtual) {
     const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'paciente.dataNascimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.procedimento', 'agenda.horario', 'agenda.uuid', 'agenda.atendido', 'agenda.valorConsulta', 'agenda.dataVencimento')

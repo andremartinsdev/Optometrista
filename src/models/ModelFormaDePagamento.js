@@ -2,21 +2,21 @@ import knex from '../config/db'
 import { v4 } from 'uuid'
 
 class ModelFormaDePagamento {
-    async save(data){
+    async save(data) {
         const uuid = v4();
         const result = await knex('formapagamento').insert({
             uuid,
             ...data
         })
         return ({
-          uuid,
-          idFormaPagamento: result  
+            uuid,
+            idFormaPagamento: result
         })
     }
 
-    async read(idEmpresa){
-        const result = await knex('formapagamento').select()
-        .where('idEmpresa','=', idEmpresa)
+    async read(idEmpresa) {
+        const result = await knex('formapagamento').select(['uuid','descricao'])
+            .where('idEmpresa', '=', idEmpresa)
 
         return result
     }
@@ -24,25 +24,25 @@ class ModelFormaDePagamento {
 
     async update(data, uuid = "", idEmpresa) {
         await knex('formapagamento').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
-      }
+    }
 
-    async findById(idEmpresa, uuid){
-        const result = await knex('formapagamento').select()
-        .where('idEmpresa','=', idEmpresa)
-        .andWhere('uuid', '=', uuid)
-
+    async findById(idEmpresa, uuid, colunas = []) {
+        const result = await knex('formapagamento').select(colunas)
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
+        
         return result
     }
 
-    async delete(uuid, idEmpresa){
+    async delete(uuid, idEmpresa) {
         const result = await knex('formapagamento').delete()
-        .where('idEmpresa', '=', idEmpresa)
-        .andWhere('uuid','=', uuid)
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
 
         return result
     }
 
-    
+
 }
 
 export default new ModelFormaDePagamento();

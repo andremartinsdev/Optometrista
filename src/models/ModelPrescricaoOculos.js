@@ -28,16 +28,42 @@ class ModelPrecricaoOculos {
     return result
   }
 
-  async read(idPaciente, idEmpresa, dataInicial, dataFinal, page, limit) {
-    const result = await knex('prescricao_oculos').select()
-      .where('idEmpresa', '=', idEmpresa)
-      .andWhere('idPaciente', '=', idPaciente)
+  async readDate(idEmpresa, dataInicial, dataFinal, page, limit) {
+    const result = await knex('prescricao_oculos').select(['prescricao_oculos.adicao', 'prescricao_oculos.od_av',
+  'prescricao_oculos.od_cilindrico', 'prescricao_oculos.od_eixo', 'prescricao_oculos.od_esferico' , 'prescricao_oculos.oe_av', 'prescricao_oculos.data'
+  , 'prescricao_oculos.oe_cilindrico', 'prescricao_oculos.oe_eixo', 'prescricao_oculos.oe_esferico','paciente.nomePaciente','prescricao_oculos.uuid' ])
+      .where('prescricao_oculos.idEmpresa', '=', idEmpresa)
       .andWhere('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
+      .leftJoin('paciente', 'prescricao_oculos.idPaciente', 'paciente.idPaciente')
       .limit(limit).offset((page - 1) * limit)
     const total = await knex('prescricao_oculos')
-      .where('idEmpresa', '=', idEmpresa)
-      .andWhere('idPaciente', '=', idPaciente)
+      .where('prescricao_oculos.idEmpresa', '=', idEmpresa)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+
+      .count('idEmpresa as count')
+    return {
+      result,
+      total
+    }
+
+   
+  }
+
+  async read(idPaciente, idEmpresa, dataInicial, dataFinal, page, limit) {
+    const result = await knex('prescricao_oculos').select(['prescricao_oculos.adicao', 'prescricao_oculos.od_av',
+  'prescricao_oculos.od_cilindrico', 'prescricao_oculos.od_eixo', 'prescricao_oculos.od_esferico' , 'prescricao_oculos.oe_av', 'prescricao_oculos.data'
+  , 'prescricao_oculos.oe_cilindrico', 'prescricao_oculos.oe_eixo', 'prescricao_oculos.oe_esferico','paciente.nomePaciente','prescricao_oculos.uuid' ])
+      .where('prescricao_oculos.idEmpresa', '=', idEmpresa)
+      .andWhere('prescricao_oculos.idPaciente', '=', idPaciente)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+      .leftJoin('paciente', 'prescricao_oculos.idPaciente', 'paciente.idPaciente')
+      .limit(limit).offset((page - 1) * limit)
+    const total = await knex('prescricao_oculos')
+      .where('prescricao_oculos.idEmpresa', '=', idEmpresa)
+      .andWhere('prescricao_oculos.idPaciente', '=', idPaciente)
       .andWhere('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
 

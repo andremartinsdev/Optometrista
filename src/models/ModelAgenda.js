@@ -43,8 +43,10 @@ class ModelAgenda {
     const result = await knex('agenda').select(
       [
         'paciente.uuid AS idPaciente', 'paciente.nomePaciente',
-        'paciente.dataNascimento', 'paciente.titulo',
-        'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido',
+        'paciente.uuid AS uuidPaciente', 'formapagamento.uuid AS uuidFormaPagamento', 'formapagamento.descricao',
+        'oticaparceira.uuid AS uuidOticaParceira',
+        'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido','agenda.titulo',
+        'procedimentos.uuid AS uuidProcedimento',
         'agenda.recebido', 'agenda.valorConsulta'
       ]
     )
@@ -52,6 +54,8 @@ class ModelAgenda {
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
       .leftJoin('paciente', 'agenda.idPaciente', 'paciente.idPaciente')
       .leftJoin('procedimentos', 'agenda.idProcedimento', 'procedimentos.idProcedimento')
+      .leftJoin('formapagamento', 'agenda.idFormaPagamento', 'formapagamento.idFormaPagamento')
+      .leftJoin('oticaparceira', 'agenda.idOticaParceira', 'oticaparceira.idOticaParceira')
       .first()
 
     return result
@@ -66,6 +70,10 @@ class ModelAgenda {
 
   async update(data, idEmpresa) {
     await knex('agenda').update(data).where('uuid', '=', data.uuid).andWhere('idEmpresa', '=', idEmpresa)
+  }
+
+  async updatePagamento(data, idEmpresa, uuid) {
+    await knex('agenda').update(data).where('uuid', '=',uuid).andWhere('idEmpresa', '=', idEmpresa)
   }
 
 
@@ -102,7 +110,7 @@ class ModelAgenda {
 
 
   async readDateRelatorioPagination(dataInicial, dataFinal, idEmpresa, page, limit) {
-    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.uuid AS pacienteUuid', 'paciente.nomePaciente', 'agenda.procedimento', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
+    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.uuid AS pacienteUuid', 'paciente.nomePaciente', 'agenda.idProcedimento', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
       .where('agenda.data', '>=', dataInicial)
       .andWhere('agenda.data', '<=', dataFinal)
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
@@ -175,12 +183,13 @@ class ModelAgenda {
   }
 
   async readDateAgendamentoFinalizadoPagination(dataInicial, dataFinal, idEmpresa, page, limit) {
-    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'paciente.dataNascimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.procedimento', 'agenda.horario', 'agenda.uuid', 'agenda.atendido', 'agenda.valorConsulta')
+    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'paciente.dataNascimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'procedimentos.text', 'agenda.horario', 'agenda.uuid', 'agenda.atendido', 'agenda.valorConsulta', 'agenda.titulo')
       .where('agenda.data', '>=', dataInicial)
       .andWhere('agenda.data', '<=', dataFinal)
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
       .andWhere('agenda.atendido', '=', true)
       .leftJoin('paciente', 'agenda.idPaciente', 'paciente.idPaciente')
+      .leftJoin('procedimentos', 'agenda.idProcedimento', 'procedimentos.idProcedimento')
       .orderBy('agenda.data', 'asc')
       .limit(limit).offset((page - 1) * limit)
     const total = await knex('agenda')
@@ -218,12 +227,11 @@ class ModelAgenda {
 
 
   async readDateInnerPagination(data, idEmpresa, limit, page) {
-    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'agenda.procedimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
+    const result = await knex('agenda').select('paciente.idPaciente', 'paciente.nomePaciente', 'agenda.idProcedimento', 'paciente.uuid AS pacienteUuid', 'agenda.data', 'agenda.horario', 'agenda.uuid', 'agenda.atendido')
       .where('agenda.data', '=', data)
       .andWhere('agenda.idEmpresa', '=', idEmpresa)
       .leftJoin('paciente', 'agenda.idPaciente', 'paciente.idPaciente')
       .orderBy('agenda.horario', 'asc')
-
       .limit(limit).offset((page - 1) * limit)
     const total = await knex('agenda')
       .where('idEmpresa', '=', idEmpresa)
@@ -237,14 +245,26 @@ class ModelAgenda {
   }
 
 
-  async readDatePaciente(dataInicial, dataFinal, idEmpresa, idPaciente) {
-    const result = await knex('agenda').select()
+  async readDatePaciente(dataInicial, dataFinal, idEmpresa, idPaciente, limit, page) {
+    const result = await knex('agenda').select('agenda.uuid', 'agenda.titulo', 'agenda.data', 'agenda.idPaciente')
       .where('data', '>=', dataInicial)
       .andWhere('data', '<=', dataFinal)
       .andWhere('idPaciente', '=', idPaciente)
       .andWhere('idEmpresa', '=', idEmpresa)
+      .orderBy('agenda.horario', 'asc')
+      .limit(limit).offset((page - 1) * limit)
+    const total = await knex('agenda')
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('data', '>=', dataInicial)
+      .andWhere('data', '<=', dataFinal)
+      .andWhere('idPaciente', '=', idPaciente)
+      .count('idEmpresa as count')
+      console.log(result)
+    return {
+      result,
+      total
+    }
 
-    return result
   }
 
   async countPaciente(idPaciente, idEmpresa) {

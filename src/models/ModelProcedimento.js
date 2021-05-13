@@ -26,6 +26,13 @@ class ModelProcedimento {
       return result
     }
 
+    async readUuid(idEmpresa, uuid) {
+      const result = await knex('procedimentos').select(['idProcedimento'])
+        .where('idEmpresa', '=', idEmpresa)
+        .andWhere('uuid', '=', uuid)
+      return result
+    }
+
     async update(procedimento, uuid = "") {
       await knex('procedimentos').update(procedimento).where('uuid', '=', uuid)
     }

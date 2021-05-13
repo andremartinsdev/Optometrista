@@ -25,9 +25,16 @@ class ModelOticasParceiras {
         await knex('oticaparceira').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
     }
 
+    async readUuid(idEmpresa, uuid) {
+        const result = await knex('oticaparceira').select(['idOticaParceira'])
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
+        return result
+    }
+
 
     async read(idEmpresa) {
-        const result = await knex('oticaparceira').select(['uuid', 'nome'])
+        const result = await knex('oticaparceira').select(['uuid', 'descricao'])
             .where('idEmpresa', '=', idEmpresa)
 
         return result

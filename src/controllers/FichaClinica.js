@@ -1,4 +1,5 @@
 import ModelFichaClinica from '../models/ModelFichaClinica'
+import ModelPaciente from '../models/ModelPaciente'
 import Validation from '../Validation/ValidaFichaClinica'
 
 
@@ -47,12 +48,14 @@ class ControllerFichaClinica {
       const dataInicial = req.params.dataInicial;
       const dataFinal = req.params.dataFinal;
       const { page = 1, limit = 5 } = req.query;
-
-      const result = await ModelFichaClinica.readPagination(idPaciente, req.idEmpresa, dataInicial, dataFinal, page, limit)
+      const paciente = await ModelPaciente.readUuid(req.idEmpresa, idPaciente)
+      const result = await ModelFichaClinica.readPagination(paciente[0].idPaciente, req.idEmpresa, dataInicial, dataFinal, page, limit)
+      console.log(result)
       return res.status(201).json({
         result
       })
     } catch (error) {
+      console.log(error)
       return res.status(500).json({
         message: "Erro ao consultar ficha clinica"
       })

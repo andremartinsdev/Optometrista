@@ -44,6 +44,13 @@ class ModelPaciente {
     return result
   }
 
+  async readUuid(idEmpresa, uuid) {
+    const result = await knex('paciente').select(['idPaciente'])
+      .where('idEmpresa', '=', idEmpresa)
+      .andWhere('uuid', '=', uuid)
+    return result
+  }
+
   async pagination(idEmpresa, campo, condicao, value, limit, page) {
     if (condicao == 'like') {
       value = `%${value}%`

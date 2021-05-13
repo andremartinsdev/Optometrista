@@ -10,7 +10,7 @@ function ValidaAgendamento(data) {
             }
 
         },
-        procedimento: {
+        idProcedimento: {
             presence:{
                 allowEmpty: false,
                 message: 'O campo Procedimento não pode ficar em branco.',

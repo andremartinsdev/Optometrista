@@ -2,7 +2,7 @@ import { v4 } from "uuid"
 
 class OpticaParceiraEntity {
   uuid
-  nome
+  descricao
   constructor(data, uuid) {
     Object.assign(this, data)
     if (!uuid) {

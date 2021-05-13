@@ -15,12 +15,19 @@ class ModelFormaDePagamento {
     }
 
     async read(idEmpresa) {
-        const result = await knex('formapagamento').select(['uuid','descricao'])
+        const result = await knex('formapagamento').select(['uuid', 'descricao'])
             .where('idEmpresa', '=', idEmpresa)
 
         return result
     }
 
+
+    async readUuid(idEmpresa, uuid) {
+        const result = await knex('formapagamento').select(['idFormaPagamento'])
+            .where('idEmpresa', '=', idEmpresa)
+            .andWhere('uuid', '=', uuid)
+        return result
+    }
 
     async update(data, uuid = "", idEmpresa) {
         await knex('formapagamento').update(data).where('uuid', '=', uuid).andWhere('idEmpresa', '=', idEmpresa)
@@ -30,7 +37,7 @@ class ModelFormaDePagamento {
         const result = await knex('formapagamento').select(colunas)
             .where('idEmpresa', '=', idEmpresa)
             .andWhere('uuid', '=', uuid)
-        
+
         return result
     }
 

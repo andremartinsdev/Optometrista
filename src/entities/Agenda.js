@@ -10,7 +10,7 @@ class AgendaEntity {
   data;
   dataVencimento;
   horario;
-  procedimento;
+  idProcedimento;
   valorConsulta;
   idConsulta;
   dataPagamento;

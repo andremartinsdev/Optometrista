@@ -7,6 +7,7 @@ router.post('/', ControllerAgenda.save)
 router.get('/', ControllerAgenda.read)
 router.delete('/:uuid', ControllerAgenda.delete)
 router.put('/:uuid', ControllerAgenda.update)
+router.put('/updatePagamento/:uuid', ControllerAgenda.updatePagamento)
 router.get('/read/:uuid', ControllerAgenda.readParams)
 router.get('/paginationAllAgenda/:dataInicial/:dataFinal/page', ControllerAgenda.paginationAllAgenda)
 router.patch('/updateIdConsultAtendido/:uuid', ControllerAgenda.updateIdConsultAtendido)
@@ -23,7 +24,7 @@ router.get('/readDate/Agendamento/Finalizado/:dataInicial/:dataFinal', Controlle
 router.get('/readDate/Agendamento/Finalizado/:dataInicial/:dataFinal/page', ControllerAgenda.readDateAgendamentoFinalizadoPagination)
 router.get('/readDateInner/:data', ControllerAgenda.readDateInner)
 router.get('/readDateInnerPagination/:data/page', ControllerAgenda.readDateInnerPagination)
-router.get('/readDatePaciente/:dataInicial/:dataFinal/:idPaciente', ControllerAgenda.readDatePaciente)
+router.get('/readDatePaciente/:dataInicial/:dataFinal/:idPaciente/page', ControllerAgenda.readDatePaciente)
 router.get('/readDateVencimento/:dataAtual', ControllerAgenda.readDateVencimento)
 
 

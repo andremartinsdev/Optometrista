@@ -32,7 +32,7 @@ CREATE TABLE `oticaParceira` (
   `idOticaParceira` int NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `idEmpresa` int NOT NULL,
   `uuid` varchar(36) NOT NULL,
-  `nome` varchar(50) NOT NULL
+  `descricao` varchar(50) NOT NULL
 );
 
 

@@ -1,8 +1,8 @@
-import PacienteEntity from '../entities/Paciente'
-import ModelPaciente from '../models/ModelPaciente'
-import ModelAgenda from '../models/ModelAgenda'
-import ModelFicha from '../models/ModelFichaClinica'
-import ValidarPaciente from '../Validation/ValidaPaciente'
+import PacienteEntity from '../entities/Paciente.js'
+import ModelAgenda from '../models/ModelAgenda.js'
+import ModelFicha from '../models/ModelFichaClinica.js'
+import ModelPaciente from '../models/ModelPaciente.js'
+import ValidarPaciente from '../Validation/ValidaPaciente.js'
 
 class ControllerPaciente {
   async save(req, res) {

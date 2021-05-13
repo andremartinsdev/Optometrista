@@ -1,4 +1,4 @@
-import ModelLaudo from '../models/ModelLaudo'
+import ModelLaudo from '../models/ModelLaudo.js'
 
 
 class ControllerLaudo {

@@ -1,5 +1,5 @@
-import ModelPrescricaoLente from '../models/ModelPrescricaoLente'
-import Validation from '../Validation/ValidaPrescricaoLente'
+import ModelPrescricaoLente from '../models/ModelPrescricaoLente.js'
+import Validation from '../Validation/ValidaPrescricaoLente.js'
 
 class ControllerPrescrissaoLente {
   async save(req, res) {

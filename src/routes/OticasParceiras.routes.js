@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import ControllerOticaParceira from '../controllers/OticaParceira'
+import { Router } from 'express';
+import ControllerOticaParceira from '../controllers/OticaParceira.js';
 
 const router = Router();
 

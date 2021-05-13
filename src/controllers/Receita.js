@@ -1,5 +1,5 @@
-import ModelReceita from '../models/ModelReceita'
-import Validation from '../Validation/ValidaReceita'
+import ModelReceita from '../models/ModelReceita.js'
+import Validation from '../Validation/ValidaReceita.js'
 
 
 class ControllerReceita {

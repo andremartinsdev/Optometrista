@@ -134,8 +134,7 @@ CREATE TABLE `agenda` (
   FOREIGN KEY (idPaciente) REFERENCES paciente(idPaciente),
   FOREIGN KEY (idFormaPagamento) REFERENCES formapagamento(idFormaPagamento),
   FOREIGN KEY (idOticaParceira) REFERENCES oticaparceira(idOticaParceira),
-  FOREIGN KEY (idProcedimento) REFERENCES procedimentos(idProcedimento),
-
+  FOREIGN KEY (idProcedimento) REFERENCES procedimentos(idProcedimento)
 );
 
 

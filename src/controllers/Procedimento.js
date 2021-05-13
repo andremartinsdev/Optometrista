@@ -1,5 +1,5 @@
-import ModelProcedimento from '../models/ModelProcedimento'
-import Validation from '../Validation/ValidaProcedimento'
+import ModelProcedimento from '../models/ModelProcedimento.js'
+import Validation from '../Validation/ValidaProcedimento.js'
 
 
 class ControllerProcedimento {

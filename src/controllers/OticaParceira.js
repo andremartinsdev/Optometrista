@@ -1,8 +1,7 @@
-import ModelOticasParceiras from '../models/ModelOticasParceiras'
-import ModelDespesa from '../models/ModelDespesa'
-import ModelAgenda from '../models/ModelAgenda'
-import Validation from '../Validation/ValidaOticaParceira'
-import OpticaParceiraEntity from '../entities/OpticaParceira'
+import OpticaParceiraEntity from '../entities/OpticaParceira.js'
+import ModelAgenda from '../models/ModelAgenda.js'
+import ModelOticasParceiras from '../models/ModelOticasParceiras.js'
+import Validation from '../Validation/ValidaOticaParceira.js'
 
 
 class ControllerOticaParceira {

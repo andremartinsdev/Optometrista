@@ -1,5 +1,5 @@
-import ModelConsulta from '../models/ModelConsulta'
-import Validation from '../Validation/ValidaConsulta'
+import ModelConsulta from '../models/ModelConsulta.js'
+import Validation from '../Validation/ValidaConsulta.js'
 
 
 class ControllerConsulta {

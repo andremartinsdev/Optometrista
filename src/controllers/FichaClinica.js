@@ -1,6 +1,6 @@
-import ModelFichaClinica from '../models/ModelFichaClinica'
-import ModelPaciente from '../models/ModelPaciente'
-import Validation from '../Validation/ValidaFichaClinica'
+import ModelFichaClinica from '../models/ModelFichaClinica.js'
+import ModelPaciente from '../models/ModelPaciente.js'
+import Validation from '../Validation/ValidaFichaClinica.js'
 
 
 class ControllerFichaClinica {

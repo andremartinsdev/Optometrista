@@ -1,4 +1,4 @@
-import knex from '../config/db'
+import knex from '../config/db.js'
 
 class ModelAgenda {
   async save(data) {

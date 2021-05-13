@@ -1,5 +1,6 @@
-import axios from 'axios'
-import { generateToken } from '../Middleware/Authentication'
+import axios from 'axios';
+import { generateToken } from '../Middleware/Authentication.js';
+
 class ControllerLogin {
     async logar(req, res) {
         try {

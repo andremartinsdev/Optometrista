@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import ControllerFormaDePagamento from '../controllers/FormaDePagamento'
+import { Router } from 'express';
+import ControllerFormaDePagamento from '../controllers/FormaDePagamento.js';
 
 const router = Router();
 

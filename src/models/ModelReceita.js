@@ -1,5 +1,5 @@
-import knex from '../config/db'
-import { v4 } from 'uuid'
+import { v4 } from 'uuid';
+import knex from '../config/db.js';
 
 class ModelReceita {
     async save(receita){

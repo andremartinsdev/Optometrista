@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import ControllerAgenda from '../controllers/Agenda'
+import ControllerAgenda from '../controllers/Agenda.js'
 
 const router = Router()
 

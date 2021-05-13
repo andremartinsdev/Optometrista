@@ -1,6 +1,6 @@
-import ModelPrescrissaoOculos from '../models/ModelPrescricaoOculos'
-import ModelPaciente from '../models/ModelPaciente'
-import Validation from '../Validation/ValidaPrescricaoOculos'
+import ModelPaciente from '../models/ModelPaciente.js'
+import ModelPrescrissaoOculos from '../models/ModelPrescricaoOculos.js'
+import Validation from '../Validation/ValidaPrescricaoOculos.js'
 
 class ControllerPrescrissaoOculos {
   async save(req, res) {

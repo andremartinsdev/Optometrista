@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import ControllerLaudo from '../controllers/Laudo'
+import { Router } from 'express';
+import ControllerLaudo from '../controllers/Laudo.js';
 
 
 const router = Router();

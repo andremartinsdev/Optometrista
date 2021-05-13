@@ -1,8 +1,8 @@
-import express from "express"
-import Routes from './routes/routes'
 import cors from 'cors'
-import LoginRoter from './routes/Login.routes'
-import { verify } from './Middleware/Authentication'
+import express from "express"
+import { verify } from './Middleware/Authentication.js'
+import LoginRoter from './routes/Login.routes.js'
+import Routes from './routes/routes.js'
 
 const server = express();
 

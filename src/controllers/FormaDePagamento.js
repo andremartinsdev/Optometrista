@@ -1,7 +1,7 @@
-import ModelFormaDePagamento from '../models/ModelFormaDePagamento'
-import ModelAgenda from '../models/ModelAgenda'
-import ModelDespesa from '../models/ModelDespesa'
-import Validation from '../Validation/ValidaFormaPagamento'
+import ModelAgenda from '../models/ModelAgenda.js'
+import ModelDespesa from '../models/ModelDespesa.js'
+import ModelFormaDePagamento from '../models/ModelFormaDePagamento.js'
+import Validation from '../Validation/ValidaFormaPagamento.js'
 
 
 class ControllerFormaDePagamento {

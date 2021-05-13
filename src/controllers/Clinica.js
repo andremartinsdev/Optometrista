@@ -1,4 +1,4 @@
-import ModelClinica from '../models/ModelClinica'
+import ModelClinica from '../models/ModelClinica.js'
 
 class ControllerClinica {
     async save(req, res) {

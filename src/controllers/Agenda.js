@@ -1,10 +1,10 @@
-import ModelAgenda from '../models/ModelAgenda'
-import Validation from '../Validation/ValidaAgenda'
-import AgendaEntity from '../entities/Agenda'
-import ModelCliente from '../models/ModelPaciente'
-import ModelFormaP from '../models/ModelFormaDePagamento'
-import ModelProcedimento from '../models/ModelProcedimento'
-import ModelOptParceira from '../models/ModelOticasParceiras'
+import AgendaEntity from '../entities/Agenda.js'
+import ModelAgenda from '../models/ModelAgenda.js'
+import ModelFormaP from '../models/ModelFormaDePagamento.js'
+import ModelOptParceira from '../models/ModelOticasParceiras.js'
+import ModelCliente from '../models/ModelPaciente.js'
+import ModelProcedimento from '../models/ModelProcedimento.js'
+import Validation from '../Validation/ValidaAgenda.js'
 
 var cl = (log) => { console.log(log) }
 

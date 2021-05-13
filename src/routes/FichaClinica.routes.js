@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import ControllerFichaClinica from '../controllers/FichaClinica'
+import ControllerFichaClinica from '../controllers/FichaClinica.js'
 
 const router = Router()
 

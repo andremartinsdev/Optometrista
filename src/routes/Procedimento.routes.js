@@ -1,5 +1,5 @@
-import { Router } from 'express'
-import ControllerProcedimento from '../controllers/Procedimento'
+import { Router } from 'express';
+import ControllerProcedimento from '../controllers/Procedimento.js';
 
 const router = Router();
 

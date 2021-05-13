@@ -1,6 +1,5 @@
-import validate from 'validate.js'
-import ModelDespesa from '../models/ModelDespesa'
-import Validation from '../Validation/ValidaDespesa'
+import ModelDespesa from '../models/ModelDespesa.js'
+import Validation from '../Validation/ValidaDespesa.js'
 
 
 

@@ -11,11 +11,13 @@ server.use(express.json())
 
 server.use('/', LoginRoter);
 
+server.get('/version',(req,res)=>{
+    return res.send('ok')
+})
+
 server.use(verify);
 
 server.use(Routes)
 
-server.get('/version',(req,res)=>{
-    return res.send('ok')
-})
+
 server.listen(3002);

@@ -15,4 +15,4 @@ server.use(verify);
 
 server.use(Routes)
 
-server.listen(3000, () => console.log(`http://localhost:3000`));
+server.listen(3002);
